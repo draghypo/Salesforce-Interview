@@ -1,0 +1,22 @@
+ Lookup and Master Detail Realationship:- It's a salesforce Realationship, let suppose we have two objects Parent and child in child
+                                          objects we have field something that hold the parent properties.
+
+  
+                Diffrences between Lookup Realationship and Master Detail Realationship
+-----------------------------------------------------------------------------------------------------------------------------------
+
+                    Lookup Realation                                   |         Master Detail Realation
+                                                                       |
+  a).   If parent records deleted child wil be not deleted.            |    If parent records deleted child records will be deleted.
+  b).   It is lossely coulpled.                                        |    It is tightly coulpled.
+  c).   It is optional Realation.child records can exist without parent|    IT can not exist without parent records.
+  d).   It does not support Rollup summary field.                      |    Rollup summary can not be possible without master Detail
+  e).   Child records do not inherit security or sharing setting.      |    child records inherit the security or sharing setting.
+  ------------------------------------------------------------------------------------------------------------------------------------
+
+  Note:- In one objects we can create only 40 realtionships. 
+            only 40 lookup.
+            only 2 master detail
+            38 lookup + 2 master detail.
+
+  Note:- Rollup summary can be created in parent side only, If records exist can not be created,                                      
