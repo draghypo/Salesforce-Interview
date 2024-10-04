@@ -15,7 +15,10 @@
                             5 :- column number which you want to map in the contact sheet this column records will show there.
                             flase:- for non exact value , true for exact value.
 
-        Account Records:-
+        d) now Insert the Contacts 
+        e) go with your choice you have multiple options to do like dataloader , dataimport wizard, dataloder.io, workbench and salesforce Inspector.
+
+                Account Records:-
  +---------------+-----------+---------------+-------+--------+
 | Account Name  | Type      | Industry      | Rating| AccountId |
 +---------------+-----------+---------------+-------+--------+
@@ -28,7 +31,7 @@
 | Samsung       | Customer  | Manufacturing  | Hot   | 130    |
 +---------------+-----------+---------------+-------+--------+
 
-Contacts:- 
+    Contacts:- 
 +-----------+----------+-------------------+------------+--------------+----------+
 | FirstName | LastName | Email             | Phone      | Account Name | AccountId|
 +-----------+----------+-------------------+------------+--------------+----------+
@@ -43,5 +46,7 @@ Contacts:-
 | Tanveer   | Khan     | tanveer@gm.com    | 9905566001 | Infosys      | 125      |
 | Kaifi     | Qadri    | kaifi@gm.com      | 77668800229| TechMahindra | 126      |
 +-----------+----------+-------------------+------------+--------------+----------+
+
+end.
 
         
