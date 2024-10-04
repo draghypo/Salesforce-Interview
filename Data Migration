@@ -1,0 +1,47 @@
+                            Data Migration:- we are migrating records from one org to other org.
+                        -----------------------------------------------------------------------------
+
+    Requirment:- Migrate Account and their Associated contacts records.
+    How to do:- We have multiple Option through Dataloader, Dataloader.io, DataImportWizard and Salesforce Inspectore.
+                but first we need to map the records for the contacts with their Accounts.
+
+    Steps:- 
+        a). Retrive the Accounts from the Source Org and keep it in the excel file in Account sheet.
+        b). Insert Accounts in the Target org and get the Account Id of the target org paste that id to Account sheet with separate     coloumn.
+        c). Now Move to the contacts records create coloumn Account Id and map the account id by using vlookup
+            ex :- =VLOOKUP(E2,Account!A:E,5,FALSE)
+                            E2:- Account Name present in contact sheet.
+                            Account!A:E :- Account sheet with total records.
+                            5 :- column number which you want to map in the contact sheet this column records will show there.
+                            flase:- for non exact value , true for exact value.
+
+        Account Records:-
+ +---------------+-----------+---------------+-------+--------+
+| Account Name  | Type      | Industry      | Rating| AccountId |
++---------------+-----------+---------------+-------+--------+
+| Accenture     | Customer  | Manufacturing  | Hot   | 124    |
+| Infosys       | Partner   | Technology     | Warm  | 125    |
+| TechMahindra  | Competitor| Environmental  | Cold  | 126    |
+| Capgemini     | Customer  | Manufacturing  | Hot   | 127    |
+| EY            | Partner   | Technology     | Warm  | 128    |
+| Salesforce     | Competitor| Environmental  | Cold  | 129   |
+| Samsung       | Customer  | Manufacturing  | Hot   | 130    |
++---------------+-----------+---------------+-------+--------+
+
+Contacts:- 
++-----------+----------+-------------------+------------+--------------+----------+
+| FirstName | LastName | Email             | Phone      | Account Name | AccountId|
++-----------+----------+-------------------+------------+--------------+----------+
+| Munnan    | Alam     | munna@gma.com     | 1234567890 | Infosys      | 125      |
+| Sadiq     | Alam     | sadiq@gm.com      | 987654321  | Salesforce   | 129      |
+| Ehsan     | Alam     | ehsan@gm.com      | 987612345  | EY           | 128      |
+| Imran     | Alam     | imran@gm.com      | 9908765237 | Accenture    | 124      |
+| Majid     | Alam     | majid@gm.com      | 9905543219 | Accenture    | 124      |
+| Murshid   | Alam     | murshid@gm.com    | 9905544321 | TechMahindra | 126      |
+| Musfique  | Alam     | musfiq@gm.com     | 9905577882 | Salesforce   | 129      |
+| Sinu      | Bhai     | sinu@gm.com       | 7254969987 | Samsung      | 130      |
+| Tanveer   | Khan     | tanveer@gm.com    | 9905566001 | Infosys      | 125      |
+| Kaifi     | Qadri    | kaifi@gm.com      | 77668800229| TechMahindra | 126      |
++-----------+----------+-------------------+------------+--------------+----------+
+
+        
