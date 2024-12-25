@@ -165,7 +165,78 @@
                                         }
                                     }
                                 }
-                            
+----------------------------------------------------------------------------------------------------------------------------
+					    	With Sharing | Without Sharing | Inherited Sharing
+					--------------------------------------------------------------------
+
+	a). Without Sharing :-  without sharing apex class runs in the system Context,It does not enforce the sharing rules. When we query records, all 				records will be fetched, even if the OWD is set to private. By default an Apex class is without sharing.
+
+		Example :- See the below class, getBoys method will return all the records of boy object. 
+
+			public Without sharing class WithSharingPractice {
+			   	@AuraEnabled
+    				public static List<Boy__c > getBoys() {
+        				List<Boy__c > boysList = [SELECT Id, Name FROM Boy__c ];
+        				return boysList;
+    				}
+			}
+
+	b). With Sharing :- with sharing apex class runs in the User context, it enforces the sharing rules. When we query records, it will fetch only those 			    records to which the current user has access.
+
+		Example:- See the below apex class, getBoys method will return those records which user has access only.
+
+			public With sharing class WithSharingPractice {
+   				@AuraEnabled
+    				public static List<Boy__c > getBoys() {
+        			List<Boy__c > boysList = [SELECT Id, Name FROM Boy__c ];
+        			return boysList;
+    				}
+			}
+
+	c). Inherited Sharing :- Inherited sharing Apex class runs in a dynamic context based on the main (parent) class. If the parent class is "with 				 	 sharing," the inherited class will behave as "with sharing." If the parent class is "without sharing," the inherited class 				 will behave as "without sharing." It dynamically determines the context in which the Apex class runs.it released in 					 winter19.
+
+			Inherited sharing = with sharing + without sharing   => depends on the main class. but if we not declare main class without sharing 					    then it will treat as a with sharing.
+
+		Example : - See the below apex class.
+				
+				               Inherited Class
+		-----------------------------------------------------------------------------------
+		|	public inherited sharing class InheritedsharingPractice {                  |
+     		|		@AuraEnabled							   |
+    		|		public static List<Boy__c > getBoys() {				   |
+        	|		List<Boy__c > boysList = [SELECT Id, Name FROM Boy__c ];	   |
+        	|		return boysList;						   |
+    		|		}								   |
+		|	}									   |
+		-----------------------------------------------------------------------------------
+
+		Scenario 1: WithoutSharingPractice is calling the inherited class, so the inherited class will treat the method in "without sharing" mode.
+
+					public without sharing class WithoutSharingPractice {
+   						@AuraEnabled
+   						public static List<Boy__c > getBoys() {
+       						return InheritedsharingPractice.getBoys();
+    						}
+					}
+
+		Scenario 2: WithSharingPractice is calling the inherited class, so the inherited class will treat the method in "with sharing" mode.
+
+					public with sharing class WithSharingPractice {
+    						@AuraEnabled
+    						public static List<Boy__c > getBoys() {
+        					return InheritedsharingPractice.getBoys();
+    						}
+					}
+
+		Scenario 3: No_With_Without_SharingPractice is calling the inherited class, so the inherited class will treat the method in "with 				    sharing" mode.
+
+					public class No_With_Without_SharingPractice {
+    						@AuraEnabled
+    						public static List<Boy__c > getBoys() {
+        					return InheritedsharingPractice.getBoys();
+    						}
+					}
+
 
 
 
