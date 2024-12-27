@@ -1,0 +1,48 @@
+                                                            Trigger
+                                                    ---------------------------
+    Trigger :- Apex trigger is a piece of code that execute when certain event occur, such as when records are inserted, updated
+               or deleted in the salesforce database.
+            
+        Best Practices for trigger in salesforce:- 
+
+                        a). One Trigger Per Object
+                        b). Logic less trigger
+                        c). Context-Specific Handler Method
+                        d). Bulkify your code
+                        e). Use collection and efficient for loop
+
+        Types of trigger :- 
+                        a). Before Triggers :- Before Trigger are used to perform the logic on the same object and specially we can not use the DML Operation(Insert, update, delete) on these triggers, The trigger fired before the data saved into the database.
+
+                        b). After Trigger :- After Trigger are used to perform the logic on the related objects, and these are the fired when records gets saved in to the database but not committed.
+
+        Trigger Events :- Trigger event is database activities that cause a trigger to run. insert, update,delete  and undelete.
+
+                Such as :- Before insert, After insert, Before update, After update, Before delete, After delete and After undelete.
+
+        
+        Context Variables :- It provides the information about the state of the records.
+
+                        a). Trigger.New :- List of new version of the records being inserted or updated.
+                        b). Trigger.old :- List of old version of the records being updated or deleted.
+                        c). Trigger.newMap :- Map of ids to the new version of records.
+                        d). Trigger.oldMap :- Map of ids to the old version of records.
+                        e). Trigger.isInsert, Trigger.isUpdate, Trigger.isDelete and Trigger.isUndelete  :- Boolean values that indicates the type of DML Operation.
+                        f). Trigger.isExecuting :- 
+                        g). Trigger.size :- 
+                        h). operationType :- 
+
+                Differences between Trigger.New and Trigger.newMap :-  
+                        a). Trigger.new will give a list of records, whereas Trigger.newMap will give a map of records, where the key is the record ID and the value is the record itself.
+                        b). Trigger.New works in before and after where as Trigger.newMap will work only in after.
+
+                Differences between Trigger.Old and Trigger.oldMap :-  
+                        a). Trigger.old will give a list of previous records, whereas Trigger.oldMap will give a map of previous records, where the key is the record ID and the value is the previous record.
+                        b). Trigger.old available for before/after triggers for update and delete and  Trigger.oldMap is also available for before/after triggers for update and delete.
+
+
+        Scenario Based Question:-  
+
+                        1). 
+
+        
