@@ -1,0 +1,32 @@
+                                                Custom Exception Process
+                                            ----------------------------------
+
+            1. To create a custom exception in Apex, we need to create a seprate class that extends the Exception class and class name 
+                       must end with Exception (e.g., MyCustomException).
+            2. Constructor: we do not need to define our own constructor, as the Exception class already provides a constructor in apex  
+                      that accepts a string message, however in java we need to define a parameterized constructor with super(message).
+            3. Exception Class Syntax:- public class MyCustomException extends Exception {
+                                            // No need for custom constructor, the default one will work
+                                        }
+            4. Once the exception class is defined, we can throw the custom exception by using the throw keyword.
+                       Syntax: throw new MyCustomException('Your custom error message here');
+                            This will stop the execution of the current logic and propagate the exception with the provided message.
+            5. Example of Throwing a Custom Exception
+                            public class AccountHandler {
+                                public static void restrictDuplicateAccount(List<Account> triggerList) {
+                                    throw new MyCustomException('wantedly exception message);
+                                }
+                                
+                            }
+            6. Handling the Custom Exception : by using try catch block.
+                                    a).public class CustomException extends Exception {}
+                                    b). public class CustomExceptionPractice {
+                                            public static void occurCustomException() {
+                                                try {
+                                                throw new CustomException('custom exception wantedly firing');// not predifined class 
+                                                }
+                                                Catch(Exception e) {
+                                                System.debug('exception occur='+e.getMessage());
+                                                }
+                                            }
+                                        }
