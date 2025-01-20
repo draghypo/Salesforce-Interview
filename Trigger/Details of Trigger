@@ -43,6 +43,33 @@
 
         Scenario Based Question:-  
 
-                        1). 
+      1). Write a trigger to restrict the insertion or updation of duplicate Account Names.
+
+                Trigger:- trigger DuplicateAccountRestrictor on Account (before insert,before update) {
+                              if(Trigger.isBefore && (Trigger.isInsert || Trigger.isUpdate)) {
+                                  AccountHandler.restrictDuplicateAccount(Trigger.New);
+                              }
+                          }
+                Apex class :- public class AccountHandler {
+                                  public static void restrictDuplicateAccount(List<Account> triggerList) {
+                                          List<Account> accList = [SELECT Id, Name FROM Account WHERE Name != Null];
+                                          Set<String> accountName = new Set<String>();
+                                          if(accList.size() > 0) {
+                                              for(Account accName : accList) {
+                                                  accountName.add(accName.Name);
+                                              }
+                                              for(Account accRecord : triggerList) {
+                                                  if(accountName.contains(accRecord.Name)) {
+                                                      accRecord.addError('Account Name can not be duplicated.');
+                                                    //accRecord.Name.addError('Account Name can not be duplicated.'); error message will show on the field.
+                                                  }
+                                              }
+                                              System.debug('once addError runs then rest code will execute but Transaction will fail, will not happen any dml');
+                                          }
+                                          
+                                      }
+                                  }
+// Note:- Records will be treated as case sensitive, if Bhim or bhim both will be treated diffrent means two accounts.
+
 
         
