@@ -1,3 +1,5 @@
 Exception :- Exception is an unexpected event that occurs during the execution of a program, that terminate the rest of flow execution.
 
-1. 
+1. System.LimitException: Too many query rows: 50001 : - It occurs when an object holds more than 50k records, and a SOQL query is used to retrieve the data.
+
+2. System.QueryException: Maximum SOQL offset allowed for the object Product_Hierarchy__c is 2000: - It occurs when we are trying to skip more than 2,000 records in a query. 
