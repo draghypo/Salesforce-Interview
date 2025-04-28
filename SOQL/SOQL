@@ -9,3 +9,5 @@
 
         3. Those account whose only close opportunity: -  
 
+        4. About Nested Query: - select id,(select id from contacts),(select id from cases),(select id from opportunities),(select id from projects__r) from account limit 5
+          explainations:- In nested queries,child object name should be in plural form.For standard objects(Contacts, Cases, Opportunities). For custom objects, append __r and use the plural form (Projects__r for a custom Project__c object).
