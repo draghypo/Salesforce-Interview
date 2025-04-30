@@ -11,3 +11,18 @@
 
         4. About Nested Query: - select id,(select id from contacts),(select id from cases),(select id from opportunities),(select id from projects__r) from account limit 5
           explainations:- In nested queries,child object name should be in plural form.For standard objects(Contacts, Cases, Opportunities). For custom objects, append __r and use the plural form (Projects__r for a custom Project__c object).
+
+        5. Account does not have any contacts:- Select Id,Name FROM Account where Id NOT IN (SELECT Accountid from contact)
+
+        6. Account Atleas One contact: - Select Id,Name FROM Account where Id IN (SELECT Accountid from contact)
+
+        7. Account does have atleas one contact and one opportunity:- Select Id,Name FROM Account where Id IN (SELECT Accountid from contact) AND Id IN (SELECT Accountid from opportunity)
+            Notes:- {It will work for AND only for OR will get error "Semi join sub-selects are not allowed with the 'OR' operator"}
+
+        8. Find second Highest Amount Opportunity: - Select Id,Amount FROM opportunity ORDER BY Amount DESC NULLS Last LIMIT 1 OFFSET 1 
+
+        9. Latest Modified Account : - Select Id,Name FROM Account ORDER BY CreatedDate DESC LIMIT 1 
+
+        10. All Accounts inculding Recyclebin : - Select Id,Name FROM Account ALL ROWS
+            Notes:- {ALL ROWS That will work in code only not in salesforce inspetor , query inspector only in code that will work}.
+
