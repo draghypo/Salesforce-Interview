@@ -52,3 +52,29 @@
       16. Show All the Custom Fields only:- select Fields(Custom) from Account Limit 200. if limit will be not used will get an error " The SOQL FIELDS function must have a LIMIT of at most 200"
       17. Show All the Standard fields only: - select Fields(Standard) from Account. No Limit Required.
       18. Date:- SELECT Id, Name from Account WHERE CreatedDate < last_N_DAYS:1 
+
+
+
+
+
+
+
+************************************************************************************************************************
+      ** Dynamic query Practice: - 
+ public static void dynamicQuery() {
+        String query = 'Select id,name from account where name=\'Paginator1\'';
+        List<Account> accList = Database.query(query);
+        System.debug('query sadiq size'+accList.size());
+    }
+    public static void dynamicQuery1() {
+        String name = 'Paginator1';
+        String ann = '2001';
+        String query = 'SELECT id, name FROM Account WHERE name = \'' + name + '\' AND AnnualRevenue = ' + ann;
+        List<Account> accList = Database.query(query);
+        System.debug('query sadiq size'+accList.size());
+    }
+    public static void dynamicQuery2(String name,String ann) {
+        String query = 'SELECT id, name FROM Account WHERE name = \'' + name + '\' AND AnnualRevenue = ' + ann;
+        List<Account> accList = Database.query(query);
+        System.debug('query sadiq size'+accList.size());
+    }
