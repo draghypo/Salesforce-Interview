@@ -29,3 +29,5 @@
         11. Fetch deleted Account from recycle bin:- SELECT Name FROM Account WHERE IsDeleted = TRUE ALL ROWS
               Note:- {This will work in code only not on qury editor, salesforce inspector}.
 
+      12. Account does have more than 2 contacts:- SELECT AccountId, COUNT(Id) FROM Contact GROUP BY AccountId HAVING COUNT(Id) > 2
+
