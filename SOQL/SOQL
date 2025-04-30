@@ -41,3 +41,13 @@
             6️⃣ ORDER BY Clause: Next, Salesforce sorts the results (e.g., ORDER BY Name ASC).
             7️⃣ LIMIT Clause: Finally, the query limits the number of records returned (e.g., LIMIT 10).
 
+       14. LIKE Operator in SOQL:-  Select Id,Name from Account where name Like '%pagi%'
+
+                    Summary:  Below follow case-insensitive..
+                    %Pagi% matches any name that contains "Pagi" anywhere. even in middle.
+                    Pagi% matches any name that starts with "Pagi". String must be start with Pagi.
+                    %Pagi matches any name that ends with "Pagi".   Strig must be end with Pagi.
+
+      15.Show the All fields of Account:- select Fields(All) from Account Limit 200. if limit will be not used will get an error " The SOQL FIELDS function must have a LIMIT of at most 200"
+      16. Show All the Custom Fields only:- select Fields(Custom) from Account Limit 200. if limit will be not used will get an error " The SOQL FIELDS function must have a LIMIT of at most 200"
+      17. Show All the Standard fields only: - select Fields(Standard) from Account. No Limit Required.
