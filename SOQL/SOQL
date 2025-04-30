@@ -51,3 +51,4 @@
       15.Show the All fields of Account:- select Fields(All) from Account Limit 200. if limit will be not used will get an error " The SOQL FIELDS function must have a LIMIT of at most 200"
       16. Show All the Custom Fields only:- select Fields(Custom) from Account Limit 200. if limit will be not used will get an error " The SOQL FIELDS function must have a LIMIT of at most 200"
       17. Show All the Standard fields only: - select Fields(Standard) from Account. No Limit Required.
+      18. Date:- SELECT Id, Name from Account WHERE CreatedDate < last_N_DAYS:1 
