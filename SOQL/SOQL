@@ -26,3 +26,6 @@
         10. All Accounts inculding Recyclebin : - Select Id,Name FROM Account ALL ROWS
             Notes:- {ALL ROWS That will work in code only not in salesforce inspetor , query inspector only in code that will work}.
 
+        11. Fetch deleted Account from recycle bin:- SELECT Name FROM Account WHERE IsDeleted = TRUE ALL ROWS
+              Note:- {This will work in code only not on qury editor, salesforce inspector}.
+
