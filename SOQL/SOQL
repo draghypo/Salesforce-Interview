@@ -31,3 +31,13 @@
 
       12. Account does have more than 2 contacts:- SELECT AccountId, COUNT(Id) FROM Contact GROUP BY AccountId HAVING COUNT(Id) > 2
 
+      13.Order of Execution soql quey:- SELECT Name, COUNT(Id) FROM Account WHERE Industry = 'Chemicals' GROUP BY Name HAVING COUNT(Id) > 0 ORDER BY Name ASC LIMIT 10
+        
+            1️⃣ FROM Clause: First, Salesforce identifies the object you’re querying (e.g., Account).
+            2️⃣ WHERE Clause: Then, it applies any filters (e.g., Industry = 'Technology') to narrow down the records.
+            3️⃣ GROUP BY Clause: Next, Salesforce groups the results based on specified fields (e.g., Name).
+            4️⃣ HAVING Clause: After grouping, it further filters the grouped data (e.g., COUNT(Id) > 1).
+            5️⃣ SELECT Clause: At this stage, Salesforce defines the fields to return (e.g., Name, COUNT(Id)) but processes them after the filtering and grouping steps.
+            6️⃣ ORDER BY Clause: Next, Salesforce sorts the results (e.g., ORDER BY Name ASC).
+            7️⃣ LIMIT Clause: Finally, the query limits the number of records returned (e.g., LIMIT 10).
+
