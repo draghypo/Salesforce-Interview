@@ -1,0 +1,14 @@
+                                                                    Purge
+
+    Purge: - Purge in Salesforce refers to the permanent deletion of records from the system. When a record is purged, it is completely removed and cannot be recovered.
+          Notes:- Soft Delete	Moves the record to the Recycle Bin, It can be recovered til 15 days.
+                  Hard Delete (Purge)	Completely removes the record from the database, can not be rollbacked.
+
+  Perform Purge if record is in object:- 
+                        List<Account> accList = [SELECT Id FROM Account WHERE Name LIKE 'Rahman%'];
+                        delete accList;
+                        Database.emptyRecycleBin(accList);
+ 
+Perform Purge, if the records is in Recycle Bin: - 
+                                                  List<Account> accList = [SELECT Id FROM Account WHERE isDeleted=True ALL ROWS];
+                                                  Database.emptyRecycleBin(accList);
