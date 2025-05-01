@@ -1,0 +1,13 @@
+                                                                          Integration
+
+                                  Integration in Salesforce is the process of connecting Salesforce with external systems to exchange data.
+
+    Authentication:- Check User Identity to provide system access.
+    Authorization:-  Verifies If user can access the resources of the system.
+
+    <==> Process of creating connected App to provide the clientId and ClientSecret:-  Setup->App Manager->New Connected App->
+
+   Callback URl for prod:- https://login.salesforce.com/
+   Callback URL for prod:-  https://test.salesforce.com/
+
+     
