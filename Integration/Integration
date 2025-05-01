@@ -7,7 +7,10 @@
 
     <==> Process of creating connected App to provide the clientId and ClientSecret:-  Setup->App Manager->New Connected App->
 
-   Callback URl for prod:- https://login.salesforce.com/
-   Callback URL for prod:-  https://test.salesforce.com/
+   <==> Callback URl for prod:- https://login.salesforce.com/
+   <==> Callback URL for prod:-  https://test.salesforce.com/
+
+  <==> For Security Token:-  your salesforce base url/_ui/system/security/ResetApiTokenEdit?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DPersonalInfo&setupid=ResetApiToken
+       
 
      
