@@ -1,0 +1,41 @@
+                                                                      Test Class
+                                                                  ---------------------
+
+      The purpose of a test class in Apex is to verify that your code behaves as expected and to ensure system stability during deployments and future changes.
+
+      Syntax:- 
+                                                      @isTest
+                                                      private class YourClassNameTest {
+                                                      
+                                                          // Setup method to create test data
+                                                          @TestSetup
+                                                          static void createRecords() {
+                                                              Account acc = new Account(Name = 'Sadiq', BooleanField__c = true);
+                                                              insert acc;
+                                                          }
+                                                      
+                                                          // Actual test method
+                                                          @isTest
+                                                          static void yourTestMethodName() {
+                                                              // Query the test data
+                                                              List<Account> accList = [SELECT Id, Name, BooleanField__c FROM Account];
+                                                              // Start test context
+                                                              Test.startTest();
+                                                              // Simulate the actual logic you want to test here (e.g., call a class/method)
+                                                              Test.stopTest();
+                                                      
+                                                              // Assertions to validate results
+                                                              System.assert(accList.size() > 0, 'No Account records found');
+                                                              System.assert(accList[0].BooleanField__c, 'BooleanField__c should be true');
+                                                              System.assertEquals('Sadiq', accList[0].Name, 'Account name should match "Sadiq"');
+                                                          }
+                                                      }
+
+   Points to be remembered: - 
+                                  a). @isTest :- Class should be declared as @isTest then that class will be considered as Test class.
+                                  b). @TestSetup:- To create Test Data.
+                                  c). @isTest:- Method should be defined with isTest anotation.
+                                  d). Test.startTest / Test.stopTest:- It will reset the governor limit.
+                                  e). System.assert:-  will check the boolean condion only refer above syntax code.
+                                  f). System.assertEquals: - It will match the two value.
+                                                      
