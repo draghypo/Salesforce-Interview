@@ -1,3 +1,19 @@
+*******************************************Start-Standard-Rest-API**************************************************************
+
+Standard Rest API:- Provided by salesforce to perform DML operation without any apex code.
+
+1.Fetch:- need to use GET Method--> https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/query?q=select id, name from account limit 5
+	Explaination:- will fetch 5 account records.
+2.Insert:- 
+3.Update:- Patch method--> https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/sobjects/Account/001J100000WF32SIAT   
+					body:- {
+					    "Name": "Acme"
+					}
+4.Delete:- DELETE method-->https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/sobjects/Account/001J100000WF32SIAT
+5.Get:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/sobjects/Account/001J100000WEx2uIAD  will get all the values of all fields.
+
+*******************************************End-Standard-Rest-API**************************************************************
+
 *****************************************************START************************************************************************
 public class Notes_RestServices {
 
