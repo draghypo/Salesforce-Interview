@@ -97,6 +97,21 @@ global class RestClassPractice {
 ***************************************************************************************************/     
     @HttpPost
     global static ResponseBody createAccount() {
+							/* {
+							"records": [
+							{
+							"name": "Acme Corporation",
+							"phone": "1234567890",
+							"annualRevenue": "124546376"      
+							},
+							{
+							"name": "Global Tech Ltd",
+							"phone": "9876543210",
+							"annualRevenue": "7896763"
+							
+							}
+							]
+							} */
         Blob payload = RestContext.request.requestBody;
         List<String> insertedId = new List<String>();
         String payloadString = payload.toString();
