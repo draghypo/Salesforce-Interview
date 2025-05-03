@@ -1,0 +1,269 @@
+*****************************************************START************************************************************************
+public class Notes_RestServices {
+
+    /* Description:- this class is used for creating the account from 3rd party application, i am providing url and will be 
+ * returned status and accountid after inserted in json format.
+    SADIQ */
+
+   // FOR POST METHOD
+/*  Workbench->loging->utilites->restexp
+ * Process of run:-  go to the workbench and login workbench and pass this url (/services/apexrest/createAccount) and this
+ * is a postmethod so we have to pass data from body in json format like that 
+ *  {"name" : "working",
+     "phone" : "123456789",
+     "industry" : "Banking"
+   } 
+
+   Output:- "{\n  \"Status\" : \"Success\",\n  \"AccountId\" : \"0015g00001Jn5SGAAZ\"\n}"
+
+*/
+	//FOR GET METHOD
+	/* Workbench->loging->utilites->restexp
+	 * Process of run:-  go to the workbench and login workbench and pass this url (/services/apexrest/createAccount) and this
+ 	* is a get method so we have to pass data from url itself  like that format.
+	/services/apexrest/createAccount/?name=getaccount&phone=123&industry=banking
+	label is case sensitive and data is not case sensitive. Name=sadiq
+*/
+/*
+@RestResource(urlmapping='/createAccount/*')
+global class RestApi_1st_example {
+    
+    @HttpPost
+    global static String createAccount(String name, String phone, String industry) {
+        System.JSONGenerator createJson = JSON.createGenerator(true);
+        createJson.writeStartObject();
+        try {
+            Account acc = new Account();
+            acc.Name = name;
+            acc.Phone = phone;
+            acc.Industry = industry;
+            insert acc;
+            createJson.writeStringField('Status', 'Success');
+            createJson.writeStringField('AccountId', acc.Id);            
+        }
+        catch(Exception e) {
+            createJson.writeStringField('Status', 'failed');
+            createJson.writeStringField('AccountId', e.getMessage());
+            
+        }
+        createJson.writeEndObject();
+        String result = createJson.getAsString();        
+        return result;
+    }
+    
+    @HttpGet
+    global static String createAccountThroughGet() {
+        RestRequest request = RestContext.request;// it will get the data from url
+        Map<String, String> urlData = request.params; // data will be stored in the map
+        System.JSONGenerator createJson = JSON.createGenerator(true);
+        createJson.writeStartObject();
+        try {
+            Account acc = new Account();
+            acc.Name = urlData.get('name');
+            acc.Phone = urlData.get('phone');
+            acc.Industry = urlData.get('industry');
+            insert acc;
+            createJson.writeStringField('Status', 'Success');
+            createJson.writeStringField('AccountId', acc.Id);            
+        }
+        catch(Exception e) {
+            createJson.writeStringField('Status', 'failed');
+            createJson.writeStringField('AccountId', e.getMessage());
+            
+        }
+        createJson.writeEndObject();
+        String result = createJson.getAsString();        
+        return result;        
+    }
+
+}*/
+    
+}
+*****************************************************END************************************************************************
+
+**************************************************New Start****************************************************************
+
+Details :- https://popcornapps-c-dev-ed.my.salesforce.com/services/apexrest/account/contact
+@RestResource(urlMapping='/account/contact')
+global class RestClassPractice {
+        static String status = 'Failed';
+
+/*************************************************************************************************
+* Description : This HttpPost is used to get body details from postman and deserailzed by using wrapper and
+				create an Account.
+* Author: Sadique
+* Date             Created By                    User-Story   
+* 03/05/2025       Accellor                      TWC777-2377
+***************************************************************************************************/     
+    @HttpPost
+    global static ResponseBody createAccount() {
+        Blob payload = RestContext.request.requestBody;
+        List<String> insertedId = new List<String>();
+        String payloadString = payload.toString();
+        if(String.isNotBlank(payloadString)) {
+            RestClassPractice.AccountList accRecord = (RestClassPractice.AccountList)JSON.deserialize(payloadString, RestClassPractice.AccountList.class);
+            if(accRecord != null && !accRecord.records.isEmpty()) {
+                status = 'Success';
+                List<Account> accListInsert = new List<Account>();
+                for(RestClassPractice.AccountWrapper rec: accRecord.records) {
+                    Account acc = new Account();
+                    acc.Name = rec.name;
+                    acc.Phone = rec.phone;
+                    acc.AnnualRevenue = rec.annualRevenue;
+                    accListInsert.add(acc);               
+                }
+                if(!accListInsert.isEmpty()) {
+                    Database.SaveResult[] result = Database.insert(accListInsert,false);
+                    for(Integer i=0; i<result.size(); i++) {
+                        if(result[i].isSuccess() == true) {
+                            insertedId.add(result[i].id);                        
+                        }
+                    }
+                }
+            }
+        }
+        ResponseBody body = new ResponseBody();
+        body.status = status;
+        body.insertedId = insertedId;
+        return body;
+    }
+    
+    Class AccountList {
+        List<AccountWrapper> records;
+    }
+    class AccountWrapper {
+        String name;
+        Decimal annualRevenue;
+        String phone;
+    }
+    global class ResponseBody {
+        String status;
+        List<String> insertedId;
+    }
+  /* End************************************************************************************************/  
+  
+    
+    
+/*************************************************************************************************
+* Description : This HttpGet method is used to get details from URl and proceed what you want.
+*End point URl: - https://popcornapps-c-dev-ed.my.salesforce.com/services/apexrest/account/contact?Name=Munnan&Phone=1234567
+* Author: Sadique
+* Date             Created By                    User-Story   
+* 03/05/2025       Accellor                      TWC777-2377
+***************************************************************************************************/     
+   
+    @HttpGet
+    global static void createAccountGetMethod() {
+        RestRequest request = RestContext.request;
+        Map<String,String> recordFromURL = request.params;
+        String accountName= recordFromURL.get('Name');
+        System.debug('Data from Get method='+accountName);
+        System.debug('Data from Get method='+recordFromURL);
+    }
+}
+
+/* End**********************************************************************************************/
+
+/*************************************************************************************************
+* Description : This method is used to get body details from postman and deserailzed by using wrapper class
+* 				all the details wrpper class and payload are below--
+* Author: Sadique
+* Date             Created By                    User-Story   
+* 03/05/2025       Accellor                      TWC777-2377
+***************************************************************************************************/
+/*@HttpPost
+global static WrapperRest.Response processInbound() {
+Boolean isJsonValid = false;
+Blob context = RestContext.request.requestBody;
+String payload = context.toString();
+if(payload.length() > 0) {
+WrapperRest.AccountContactWrapper payloadRecord = (WrapperRest.AccountContactWrapper)JSON.deserialize(payload, WrapperRest.AccountContactWrapper.class);
+isJsonValid = true;
+}
+WrapperRest.Response res = new WrapperRest.Response();
+if(isJsonValid) {
+res.status = 'Success';
+res.code = '200';
+}
+else {
+res.status= 'failed';
+res.code = '400';
+}
+return res;
+}
+/*--Start--Respected Wrapper Class--*/
+/* global class WrapperRest {
+public class AccountContactWrapper { 
+List<AccountRecord> records;
+}
+public class AccountRecord { 
+String Name;
+String Phone;
+String BillingCity;
+List<Contacts> contacts;
+}
+public class Contacts { 
+String FirstName;
+String LastName;
+String Email;
+String Phone;
+}
+
+global class Response {
+public String status;
+public  String code;
+public List<String> Ids;
+}
+}*/
+
+/*--Start--Respected Wrapper Class--*/
+
+
+
+/* Payload pass from postman:- 
+{
+"records": [
+{
+"Name": "Acme Corporation",
+"Phone": "1234567890",
+"BillingCity": "New York",
+"Contacts": [
+{
+"FirstName": "John",
+"LastName": "Doe",
+"Email": "john.doe@acme.com",
+"Phone": "555-1234"
+},
+{
+"FirstName": "Alice",
+"LastName": "Brown",
+"Email": "alice.brown@acme.com",
+"Phone": "555-4321"
+}
+]
+},
+{
+"Name": "Global Tech Ltd",
+"Phone": "9876543210",
+"BillingCity": "San Francisco",
+"Contacts": [
+{
+"FirstName": "Jane",
+"LastName": "Smith",
+"Email": "jane.smith@globaltech.com",
+"Phone": "555-5678"
+},
+{
+"FirstName": "Robert",
+"LastName": "Johnson",
+"Email": "robert.johnson@globaltech.com",
+"Phone": "555-8765"
+}
+]
+}
+]
+}*/
+
+/*************************************************************************************************
+* END processInbound Httppost method. 
+***************************************************************************************************/
