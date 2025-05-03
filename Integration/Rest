@@ -177,6 +177,63 @@ global class RestClassPractice {
     }
 }
 
+          *******Start******Test class for above Rest API for POST and Get********************************************
+            Way of writing Test class for Rest API
+						 @isTest
+						public class RestClassPracticeTest {
+						    @TestSetup
+						    static void createRecords(){
+						       insert new Account(name='Sadiq',phone='1234567');
+						    }
+						    @isTest
+						    static void capturePostMethodTest() {
+						        String payload= '{'
+						  						+'"records": ['
+						    						+'{'
+						     		 	  +'"name": "Acme Corporation",'
+						                  +'"phone": "1234567890", '
+						                  +'"annualRevenue": "124546376"'   
+						                +'}, '
+						               +' {'
+						                 +' "name": "Global Tech Ltd", '
+						                  +'"phone": "9876543210", '
+						                 +' "annualRevenue": "7896763" '
+						                 +'}'
+						              	+'] '
+						            +'}' 
+						               +' }';
+						        System.Test.startTest();
+						        RestRequest req = new RestRequest();
+						        req.requestURI = '/services/apexrest/account/contact';
+						        req.httpMethod ='POST';
+						        req.addHeader('Content-Type', ' /json');
+						        req.requestBody = Blob.valueOf(payload);
+						        RestContext.request = req;
+						        RestClassPractice.ResponseBody res = RestClassPractice.createAccount();
+						        System.Test.stopTest();
+						        System.assertEquals('Success',res.status,'mes');  
+						    }
+						    
+						    @isTest
+						    static void createAccountGetMethodTest() {
+						        RestRequest req = new RestRequest();
+						        req.httpMethod = 'GET';
+						        req.requestURI = '/services/apexrest/account/contact?Name=TestAccount';
+						        Map<String,String> params = new Map<String,String>();
+						        params.put('Name','Sadiq');
+						        RestContext.request = req;
+						        System.Test.startTest();
+						        RestClassPractice.createAccountGetMethod();
+						        System.Test.stopTest();
+						        System.assert(true, 'GET method ran successfully');
+						    }
+						}
+
+          *******End******Test class for above Rest API for POST and Get********************************************
+
+
+
+
 /* End**********************************************************************************************/
 
 /*************************************************************************************************
