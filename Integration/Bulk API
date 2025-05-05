@@ -4,6 +4,11 @@
 Bulk API: - It is used to process a large amount of data at once. means we can perform dml in bulk and it's run asynchronously.
 
   Usage: - Migrating data from another system into Salesforce and handle large amount of data.
+     The main purpose of Bulk API is to quickly and efficiently process large volumes of data (like insert, update, delete, or query thousands/millions of records) in batches, 
+        instead of one record at a time. 
+    Insert:- just need to change the operation while creating job putinsert.
+    delete:- put delete
+    query:- 
 
 How Does It Work:- 
        1.Authenticate your salesforce get AccessToken:-  https://login.salesforce.com/services/oauth2/token
@@ -90,6 +95,31 @@ How Does It Work:-
 
 
 10. for better understanding refer this trailhead:- https://trailhead.salesforce.com/content/learn/modules/api_basics/api_basics_bulk
+
+******************************************************************************************************************************
+Process of Query records:- 
+                      1. create a job with below URL and json body.
+                                    URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/query
+                                    Body:- {
+                                              "operation": "query",
+                                              "query": "SELECT Id, Name FROM Account where createddate=today",
+                                              "contentType": "CSV"
+                                            }
+                                    Method:- POST
+                                    Client-Type:- Application.json
+                                    after hitting we will recieve response.
+                      2.Now we need to change the url, need to include job id and results and pass with GET METHOD we will recieve the records based on the query.
+                                        URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/query/750J1000008Q85mIAC/results
+                                        Method:- GET
+                                        Output:- "Id","Name"
+                                        "001J100000WFtANIA1","bulk job1"
+                                        "001J100000WFtAOIA1","bulk job2"
+                                        "001J100000WFtAPIA1","bulk job3"
+                                        "001J100000WFtkLIAT","Acme Inc"
+                                        "001J100000WFtkMIAT","XYZ Corp"
+
+
+
 
 
 
