@@ -1,0 +1,100 @@
+                                                        Bulk API
+                                                    -------------------
+
+Bulk API: - It is used to process a large amount of data at once. means we can perform dml in bulk and it's run asynchronously.
+
+  Usage: - Migrating data from another system into Salesforce and handle large amount of data.
+
+How Does It Work:- 
+       1.Authenticate your salesforce get AccessToken:-  https://login.salesforce.com/services/oauth2/token
+       2. Now we need to create job through this url with post method with below body.
+                          URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest
+                          Method: - POST
+                          Body:-                {
+                                                  "operation" : "insert",
+                                                  "object" : "Account",
+                                                  "contentType" : "CSV",
+                                                  "lineEnding" : "CRLF"
+                                                  }
+
+                                        Difference between LF and CRLF
+                                      Line Ending	Stands for	Character(s) Used	Common On
+                                     *. LF :- Stands for Line Feed	\n	Linux, macOS.
+                                     *. CRLF :- stands for Carriage Return + Line Feed	\r\n	Windows systems.
+                                      Note:- "LF" is for Mac/Linux line breaks (\n), while "CRLF" is for Windows line breaks (\r\n).
+                              we will get reponse like that.
+                                                  {
+                                                      "id": "750J1000008Q7q8IAC",
+                                                      "operation": "insert",
+                                                      "object": "Account",
+                                                      "createdById": "0055g00000EecxiAAB",
+                                                      "createdDate": "2025-05-05T14:57:57.000+0000",
+                                                      "systemModstamp": "2025-05-05T14:57:57.000+0000",
+                                                      "state": "Open",
+                                                      "concurrencyMode": "Parallel",
+                                                      "contentType": "CSV",
+                                                      "apiVersion": 63.0,
+                                                      "contentUrl": "services/data/v63.0/jobs/ingest/750J1000008Q7q8IAC/batches",
+                                                      "lineEnding": "CRLF",
+                                                      "columnDelimiter": "COMMA"
+                                                  }
+3. after that your job created, check in the setup search with bulk data load jobs, there you will able to see.
+4. now again go to postman and pass the csv and method should be PUT with below URL
+          URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008Q7q8IAC/batches (changes your job id based on your org).
+          Method:- PUT
+          Content-Type:- text/csv 
+          Response:- null with 201 created. Record not created yet it is in waiting stage.
+          body:-
+                        Name,Phone
+                        Acme Inc,1234567890
+                        XYZ Corp,9876543210
+
+5. for complete the transaction, put patch method and pass below body
+       URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008Q7q8IAC
+       Method:- PATCH
+       Content-type:- Application/json
+       Body:- {
+                "state": "UploadComplete"
+              }
+6. after sending(hitting): - you will get the json with below details aboout the records whether complted or failed.
+    response:-                   {
+                                        "id": "750J1000008Q832IAC",
+                                        "operation": "insert",
+                                        "object": "Account",
+                                        "createdById": "0055g00000EecxiAAB",
+                                        "createdDate": "2025-05-05T15:05:59.000+0000",
+                                        "systemModstamp": "2025-05-05T15:24:43.000+0000",
+                                        "state": "JobComplete",
+                                        "concurrencyMode": "Parallel",
+                                        "contentType": "CSV",
+                                        "apiVersion": 63.0,
+                                        "jobType": "V2Ingest",
+                                        "lineEnding": "CRLF",
+                                        "columnDelimiter": "COMMA",
+                                        "numberRecordsProcessed": 2,
+                                        "numberRecordsFailed": 0,
+                                        "retries": 0,
+                                        "totalProcessingTime": 139,
+                                        "apiActiveProcessingTime": 73,
+                                        "apexProcessingTime": 19,
+                                        "isPkChunkingSupported": false
+                                    
+7. you can see in the setup your account/record got created. status and number of process records, timings etc.
+8. if you want to check error also you can choose GET Method and pass the below URL.
+        URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008Q7q8IAC
+
+9 for me Account got inserted successfullu.
+                                  "_"	"Id"	"Name"
+                                  "[Account]"	"001J100000WFtkLIAT"	"Acme Inc"
+                                  "[Account]"	"001J100000WFtkMIAT"	"XYZ Corp"
+
+
+
+
+
+
+
+
+
+    
+                              
