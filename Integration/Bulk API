@@ -6,9 +6,6 @@ Bulk API: - It is used to process a large amount of data at once. means we can p
   Usage: - Migrating data from another system into Salesforce and handle large amount of data.
      The main purpose of Bulk API is to quickly and efficiently process large volumes of data (like insert, update, delete, or query thousands/millions of records) in batches, 
         instead of one record at a time. 
-    Insert:- just need to change the operation while creating job put insert.
-    delete:- put delete
-    query:- 
 
 How Does It Work:- 
        1.Authenticate your salesforce get AccessToken:-  https://login.salesforce.com/services/oauth2/token
