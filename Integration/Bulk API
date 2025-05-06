@@ -175,8 +175,40 @@ Process of Updating records:-
                                 Note:- Record got updated, check in your database. even in response you can check the state whether success or failed.
                                 if state failed check through this link with GET method :- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008QAY7IAO/failedResults
 *********************************************************************************************************************************
-
-              
+Process of Upserting records:-  1. generating Access Token etc. create a job below are the details of job
+                                          URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest
+                                          Method: - POST
+                                          Body:-  {
+                                                    "object": "Account", 
+                                                    "operation": "upsert", 
+                                                    "contentType": "CSV", 
+                                                    "externalIdFieldName": "Id",
+                                                    "lineEnding": "CRLF"  
+                                                  }
+                                              Note:- Job will be created, get the job id from the response.
+                                  2.  now change the minor URL and change method as well
+                                          URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008QAdbIAG/batches
+                                          Method:- PUT
+                                          Contenet-Type:- text/csv
+                                          Body:- csv as per your choice:-  Id,Name,Phone,AnnualRevenue
+                                                                            001J100000WGEidIAH,SadiqBulkify1,8083610964,30000
+                                                                            001J100000WGEieIAH,SadiqBulkify2,8083190037,30000
+                                                                            001J100000WGEifIAH,SadiqBulkify3,9931707844,30000
+                                                                            ,SadiqueUpsert,3654827369466,30000
+                                          
+                                                Note:- After hitting we will get status code 201.
+                                3. now again need to change the minor URL and method as well and hit.
+                                             URL:- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008QAdbIAG
+                                             Method: - PATCH 
+                                             content-type:- Application/json
+                                             Body:- {"state": "UploadComplete"}
+                                    Note:- 
+                                          a).Record got updated, check in your database. even in response you can check the state whether success or failed.
+                                          b).If you want to check failed records check through this link with GET method :- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008QAdbIAG/failedResults
+                                          c).If you want to check successful records check through this link with GET method :- https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/jobs/ingest/750J1000008QAdbIAG/successfulResults
+                                          d).You can able to see results in the response. 
+********************************************************************************************************************************************************
+                                            
 
                           
 
