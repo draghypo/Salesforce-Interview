@@ -93,3 +93,19 @@ public class OutboundClassPractice {
     }
 
 }
+************************************************************************************************************************
+In outboud Integration we can perform standard Rest API as well below are the example:- 
+
+ public static void getAccountDetails() {
+    String accessToken = '00D5g00000Fo4bF!AQQAQHxn0WZeYr.iEmL4O7RppUiZRd9WpK057s1X4AA_fAXTfoaEY43a0XczuTrSqDV8jAj.AOQp4ojE4mPG_.lXK0VYXSm7';
+    String endPointUrl = 'https://popcornapps-c-dev-ed.my.salesforce.com/services/data/v63.0/sobjects/account/001J100000WGpF5IAL';
+		Http proto = new Http();
+        HttpRequest request= new HttpRequest();
+        request.setEndPoint(endPointUrl);
+        request.setMethod('GET');
+       request.setHeader('Authorization', 'Bearer ' + accessToken);
+        HttpResponse response = proto.send(request);
+        System.debug('Response Status: ' + response.getStatus());
+        System.debug('Response body: ' + response.getBody());
+    }
+*************************************************************************************************************************
