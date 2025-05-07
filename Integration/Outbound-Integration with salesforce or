@@ -1,0 +1,95 @@
+Outbound Integration:- It refers to the process of sending data from Salesforce to external systems or applications.
+
+Example based on scenarios:- we have two org, munnan@popcornapps.com and railway@sadiq.com So in Munnan org I have implemented
+                             RestResource for creating Account, now we are perfoming outbound from railway org to create account
+                            so pls refer below code and rest process:- 
+
+*******************************************************************************************************************************
+In Target ORG(munnan@popcornapps.com) implementing RestResource class
+
+@RestResource(urlMapping='/account/contact')
+global class RestClassPractice {
+    static String status = 'Failed';
+    @HttpPost
+    global static ResponseBody createAccount() {
+        Blob payload = RestContext.request.requestBody;
+        List<String> insertedId = new List<String>();
+        String payloadString = payload.toString();
+        if(String.isNotBlank(payloadString)) {
+            RestClassPractice.AccountList accRecord = (RestClassPractice.AccountList)JSON.deserialize(payloadString, RestClassPractice.AccountList.class);
+            if(accRecord != null && !accRecord.records.isEmpty()) {
+                status = 'Success';
+                List<Account> accListInsert = new List<Account>();
+                for(RestClassPractice.AccountWrapper rec: accRecord.records) {
+                    Account acc = new Account();
+                    acc.Name = rec.name;
+                    acc.Phone = rec.phone;
+                    acc.AnnualRevenue = rec.annualRevenue;
+                    accListInsert.add(acc);               
+                }
+                if(!accListInsert.isEmpty()) {
+                    Database.SaveResult[] result = Database.insert(accListInsert,false);
+                    for(Integer i=0; i<result.size(); i++) {
+                        if(result[i].isSuccess() == true) {
+                            insertedId.add(result[i].id);                        
+                        }
+                    }
+                }
+            }
+        }
+        ResponseBody body = new ResponseBody();
+        body.status = status;
+        body.insertedId = insertedId;
+        return body;
+    }
+    
+    Class AccountList {
+        List<AccountWrapper> records;
+    }
+    class AccountWrapper {
+        String name;
+        Decimal annualRevenue;
+        String phone;
+    }
+    global class ResponseBody {
+         public String status;
+        List<String> insertedId;
+    }
+}
+
+
+Now IN source org Railway side going to perform outbound means creating account record from railway to munnan org.
+
+public class OutboundClassPractice {
+    // Desc:- create an account in the munnan@popcornapps.com through outbound.
+    public static void createAccount() {
+        String accessToken = '00D5g00000Fo4bF!AQQAQHxn0WZeYr.iEmL4O7RppUiZRd9WpK057s1X4AA_fAXTfoaEY43a0XczuTrSqDV8jAj.AOQp4ojE4mPG_.lXK0VYXSm7';
+        String endPointUrl = 'https://popcornapps-c-dev-ed.my.salesforce.com/services/apexrest/account/contact';
+        String body = 
+            		' { '+
+                   ' "records": [ '+
+                   ' { '+
+                   ' "name": "Outbound from railway3", '+
+                   ' "phone": "1234567890", '+
+                   ' "annualRevenue": "124546376" '+ 
+                  '  }, '+
+                   ' { '+
+                   ' "name": "Outbound from railway4",'+
+                   ' "phone": "9876543210", '+
+                   ' "annualRevenue": "7896763" '+
+                   ' } ' +
+                   ' ] '+
+                  '  }';
+        Http proto = new Http();
+        HttpRequest request= new HttpRequest();
+        request.setEndPoint(endPointUrl);
+        request.setMethod('POST');
+        request.setHeader('Authorization', 'Bearer ' + accessToken);
+        request.setHeader('content-Type', 'application/json');
+        request.setBody(body);
+        HttpResponse response = proto.send(request);
+        System.debug('Response Status: ' + response.getStatus()); // Shows HTTP status code (e.g., 200, 404, etc.)
+        System.debug('Response Body: ' + response.getBody()); // Shows the response content (JSON, text, etc.)
+    }
+
+}
