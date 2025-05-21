@@ -4,23 +4,24 @@ Order of Execution:-
     1.Loads Initial record. If the request came from a standard UI edit page, Salesforce runs system validation to check the record for page layout specific rules, field definition, Maximum field length.
     2.Executes  flows that make before-save update. (New Change in Winter 20)
     3.Executes all before triggers. 
-    4.Runs most Custom validation.
-    5.Executes duplicate rules. Note before implementing Duplicate rule, you need to implement matching rule then only you can able to achieve duplicate rule, so in duplicate rule creating/updating can be restricted or passed as well.
+    4.Custom validation.
+    5.Executes duplicate rules: - Note before implementing Duplicate rule, you need to implement matching rule then only you can able to achieve duplicate rule, so in duplicate rule, creating/updating can be restricted or passed as well.
     6.Saves the record to the database, but doesn’t commit yet. 
     7.Executes all after triggers. 
-    8.Executes assignment rules:- Assignment rule means assiggn the owner, prebuilt feature is availabel for only two object Lead and Case.
-Executes auto-response rules. 
-Executes workflow rules. 
-If there are workflow field updates, updates the record again.
-If workflow field updates introduced new duplicate field values, executes duplicate rules again. If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
-Executes processes and flow. 
-Executes escalation rules. 
-Executes entitlement rules. 
-If the record contains a roll-up summary field or is part of a cross-object workflow, performs calculations and updates the roll-up summary field in the parent record. Parent record goes through save procedure. 
-If the parent record is updated, and a grandparent record contains a roll-up summary field or is part of a cross-object workflow, performs calculations and updates the roll-up summary field in the grandparent record. Grandparent record goes through save procedure. 
-Executes Criteria Based Sharing evaluation. 
-Commits all DML operations to the database. 
-Executes all after-commit logic, such as sending email.
+    8.Executes assignment rules:- Assignment rule means assign the owner, this feature is provided by salesforce to only Case and Lead object, once a lead or case is created automatically assign the owner to user or queue.if you want to achieve this for other object you can go with the custom logic.
+    9.Executes auto-response rules. 
+    10.Executes workflow rules. If there are workflow field updates, updates the record again.
+                                    If workflow field updates introduced new duplicate field values, executes duplicate rules again. If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
+    11.Executes processes and flow. 
+    12.Executes escalation rules. 
+    13.Executes entitlement rules. 
+    14.If the record contains a roll-up summary field or is part of a cross-object workflow, performs calculations and updates the roll-up summary field in the parent record. Parent record goes through save procedure. 
+    15.If the parent record is updated, and a grandparent record contains a roll-up summary field or is part of a cross-object workflow, performs calculations and updates the roll-up summary field in the grandparent record. Grandparent record goes through save procedure. 
+    16.Executes Criteria Based Sharing evaluation. 
+    17.Commits all DML operations to the database. 
+    18.Executes all after-commit logic, such as sending email.
+
+
 What is part of the after-commit logic?
 All email sends
 Asynchronous Apex: @future methods
