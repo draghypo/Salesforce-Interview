@@ -9,7 +9,7 @@ Order of Execution:-
     6.Saves the record to the database, but doesn’t commit yet. 
     7.Executes all after triggers. 
     8.Executes assignment rules:- Assignment rule means assign the owner, this feature is provided by salesforce to only Case and Lead object, once a lead or case is created automatically assign the owner to user or queue.if you want to achieve this for other object you can go with the custom logic.
-    9.Executes auto-response rules. 
+    9.Executes auto-response rules:- this will used to send an email to the customer, once case or lead is created.
     10.Executes workflow rules. If there are workflow field updates, updates the record again.
                                     If workflow field updates introduced new duplicate field values, executes duplicate rules again. If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
     11.Executes processes and flow. 
