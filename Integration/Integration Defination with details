@@ -22,3 +22,7 @@
               4) path:- geting or passing the information.
     Httpmessage= HttpRequest + HttpResponse
     HttpRequest and HttpResponse are a message to carry from one system to other system
+    HttpRequest:- It holds header and body , header can be a content-type,method,etc.
+
+    In Apex: - Http is connectionless and statless protocol after perorming disconnected and lost the state. for other request again you need to build a connection.
+              Http is predefined class which holds two methods a)send b) toString
