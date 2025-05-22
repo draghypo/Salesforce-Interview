@@ -13,7 +13,8 @@ Order of Execution:-
     10.Executes workflow rules. If there are workflow field updates, updates the record again.
                                     If workflow field updates introduced new duplicate field values, executes duplicate rules again. If the record was updated with workflow field updates, fires before update triggers and after update triggers one more time (and only one more time), in addition to standard validations. Custom validation rules are not run again.
     11.Executes processes and flow. 
-    12.Executes escalation rules. 
+    12.Executes escalation rules: - This rules escalate the case to other user, if the case is not resolved at given time so other user or queue can take care of that.
+                                Process: -  go to setup and search-->escalation rule and configure as per your need, define bussiness hour and time and criteria etc.
     13.Executes entitlement rules. 
     14.If the record contains a roll-up summary field or is part of a cross-object workflow, performs calculations and updates the roll-up summary field in the parent record. Parent record goes through save procedure. 
     15.If the parent record is updated, and a grandparent record contains a roll-up summary field or is part of a cross-object workflow, performs calculations and updates the roll-up summary field in the grandparent record. Grandparent record goes through save procedure. 
