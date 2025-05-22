@@ -25,4 +25,10 @@
     HttpRequest:- It holds header and body , header can be a content-type,method,etc.
 
     In Apex: - Http is connectionless and statless protocol after perorming disconnected and lost the state. for other request again you need to build a connection.
-              Http is predefined class which holds two methods a)send b) toString
+              Http is predefined class which holds two methods a)send b) toString.
+<==> URI Vs URL vs URN : -
+                          URI: - Uniform Resource Identifier :- used to identify the resouce on the internet or in a network, It's like a general category that includes both URLs and URNs.
+                          URL: - Uniform Resource Locator: - A URL is a type of URI that provides the location of a resource on the internet and how to access it (typically using HTTP or HTTPS).
+                          URN: - Uniform Resource Name: - A URN is another type of URI, but it does not provide location or how to access the resource. Instead, a URN is used to uniquely identify a resource by name within a given namespace.
+                                 Example of a URN:      urn:isbn:0451450523
+                                            A URI that gives a unique name to a resource without telling you where it is located.but you will get data by urn as well
