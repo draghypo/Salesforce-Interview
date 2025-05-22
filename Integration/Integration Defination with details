@@ -13,5 +13,10 @@
 <==> For Security Token:-  your salesforce base url/_ui/system/security/ResetApiTokenEdit?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DPersonalInfo&setupid=ResetApiToken
        
 <==> Http:- It is a protocol used to exchanging the information across the network, It will send the request to the server. 
-      Service consumer will send the request and service provider will send the response via this protocol.
-     
+            Service consumer will send the request and service provider will send the response via this protocol.
+            Http default port number is 80 and for Https is 443.
+            https://domain:portnumber/path we have four thing in URL.
+              1) protocol :- Https
+              2) Domain Name (DNS)
+              3)port Number that is added by default, nothing will happen if we add or not, if not added by default it will be added based on the protocol after the dns:portnumber
+              4) path:- from where we will pass the information.
