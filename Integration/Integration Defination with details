@@ -18,5 +18,7 @@
             https://domain:portnumber/path we have four thing in URL.
               1) protocol :- Https
               2) Domain Name (DNS)
-              3)port Number that is added by default, nothing will happen if we add or not, if not added by default it will be added based on the protocol after the dns:portnumber
-              4) path:- from where we will pass the information.
+              3) port Number that is added by default, nothing will happen if we add or not, if not added by default it will be added based on the protocol after the dns:portnumber
+              4) path:- geting or passing the information.
+    Httpmessage= HttpRequest + HttpResponse
+    HttpRequest and HttpResponse are a message to carry from one system to other system
