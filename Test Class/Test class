@@ -38,4 +38,8 @@
                                   d). Test.startTest / Test.stopTest:- It will reset the governor limit.
                                   e). System.assert:-  will check the boolean condion only refer above syntax code.
                                   f). System.assertEquals: - It will match the two value.
+                                  g). @isTest(SeeAllData=true) : - this will fetch the records from org not test setup method,
+                                                                   by default it is false if we are not adding  seeAllData=true.
+                                  h)Test.isRunningTest(): - This method will return true or false, if the class is running
+                                                              with test class then true else false that is used in the main classs not in test class.
                                                       
