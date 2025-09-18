@@ -19,3 +19,35 @@
                           }
                       }
 *************************************************************************************************************************************
+Rollup summary achievement Account contact through contact:- 
+Trigger:-  trigger ParentAchiever on Contact (After insert, After update, After delete, After undelete) {
+               if(Trigger.isAfter && (Trigger.isUpdate || Trigger.isInsert || Trigger.isUndelete || Trigger.isDelete)) {
+                  ParentAchiever.achieveParents(Trigger.isDelete ? Trigger.old : Trigger.New); 
+               }  
+           }
+
+Handler: - public class ParentAchiever {
+    public static void achieveParents(List<Contact> contactList) {
+        Set<Id> accId = new Set<Id>();
+        List<Account> accList = new List<Account>();
+        for(Contact con : contactList) {
+            if(con.accountId != null){
+                accId.add(con.accountid);
+            }
+        }
+        if(accId.isEmpty()) {
+            return;
+        }
+        List<AggregateResult> agg = [SELECT SUM(Salary__c) totalSal ,AccountId  FROM Contact WHERE AccountId in : accId GROUP BY AccountId];
+        for(AggregateResult ag : agg) {
+            Account acc = new Account();
+            acc.Id = (Id)ag.get('AccountId');
+            acc.Sum_of_salary__c = (Decimal)ag.get('totalSal');
+            accList.add(acc);
+        }
+        if(!accList.isEmpty()) {
+            update accList;
+        }     
+    }
+}
+******************************************************************************************************************************
