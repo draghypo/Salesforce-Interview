@@ -49,3 +49,12 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
                    | Monitoring	      |      Job appears in Setup → Apex Jobs	       |       Yes           |
                    | Error            |       handling	Can use Finalizer	           |        No           |
                    -----------------------------------------------------------------------------------------
+*********************************************************************************************************************************************************
+  Scenario: Update Related Contacts When Account Field Changes.
+  Business Requirement: Whenever an Account’s Industry changes, all related Contacts’ Department field should be updated to match the Account’s Industry.
+
+      Solution Analysis: -  Doing this synchronously can hit governor limits if there are thousands of Contacts.
+                            Queueable Apex can handle this asynchronously and efficiently.
+                            Future method not best for it, reason is: - Future methods cannot accept SObjects (like List<Account>).
+                                                                        You would have to pass primitive types only (e.g., List of IDs), then query the Accounts again inside the future method.
+                                                                        Extra SOQL queries → more governor limits risk.
