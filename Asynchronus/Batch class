@@ -32,6 +32,16 @@
 		    Iterable<Sobject>:- Fetch the record using soql query or prepare your own record after storing that record in List, Set, Map and Wrapper perform the logic,
                                 as you want and return that record.
 
+							 -------------------------------------------------------------------------------------------------------------
+							|	Feature				|		QueryLocator					 	|	Iterable                              |
+							|	Max Records			|		50 million							|	50,000 (heap size limit)              |
+							|	Source				|		Only SOQL							|	Any collection (List, Map, custom)    |
+							|	Performance			|		Highly optimized					|	Limited by heap & iteration logic     |
+							|	Best Use Case		|		Huge datasets directly from SOQL	|	Complex/custom data sources           |
+ 							--------------------------------------------------------------------------------------------------------------
+
+
+
                 start method example with Iterable returntype:- 
 
                                 global class BatchApexExample implements Database.Batchable<String> {
