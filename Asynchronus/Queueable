@@ -130,8 +130,29 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
                                               }
                                           }
              
-        Note:- Finalizer Interface: - 
+        Note:- Finalizer Interface: - Finalizer is a System interface implemented in a Queueable class to execute logic after the job finishes, regardless of success or failure like finally block in java.
+            Syntax: - public void execute(FinalizerContext fc) {
+                        System.debug('It acts like a finally block in Java');
+                     }
+            
+           FinalizerContext has four methods: - 
+                                                  a).Id getAsyncApexJobId:- it will provide the job id of the current queable.
+                                                                  Id jobId = fc.getAsyncApexJobId();
+                                                                  System.debug('Job Id: ' + jobId);
 
-                                              
-          
-                                                        
+                                                  b). FinalizerResult getResult() :- What it does: Returns the final outcome of the Queueable job.
+                                                                              FinalizerResult.SUCCESS → job completed successfully
+                                                                              FinalizerResult.UNHANDLED_EXCEPTION → job failed due to unhandled exception
+                                                                              FinalizerResult.ABORTED → job was aborted
+                                                                      syntax: -  if(fc.getResult() == FinalizerResult.SUCCESS){
+                                                                                      System.debug('Job completed successfully!');
+                                                                                  }
+                                                  c). Exception getException() :- Returns the exception object if the Queueable failed.
+                                                                      syntax: - if(fc.getResult() == FinalizerResult.UNHANDLED_EXCEPTION){
+                                                                                    System.debug('Exception: ' + fc.getException());
+                                                                                }
+
+
+                                                                                                                                        
+                                                                                        
+                                                                                                                                      
