@@ -39,3 +39,13 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
                                 Submit the job using System.enqueueJob(new MyQueueable()).
                                 Salesforce executes it asynchronously when resources are available.
                                 Optionally, implement Finalizer to run cleanup logic after the job finishes, even if it fails.
+  
+  Key Advantages Over Future Methods: - 
+                   ----------------------------------------------------------------------------------------|
+                   | Feature          |    	Queueable	                               |  Future Method      |
+                   |---------------------------------------------------------------------------------------|
+                   | Parameter types  |  	  Complex objects, SObjects, collections	 |  Only primitives    | 
+                   | Chaining	        |      Yes                                     |       	No           |
+                   | Monitoring	      |      Job appears in Setup → Apex Jobs	       |       Yes           |
+                   | Error            |       handling	Can use Finalizer	           |        No           |
+                   -----------------------------------------------------------------------------------------
