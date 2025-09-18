@@ -1,1 +1,53 @@
-Scheduleable
+/*  								
+ 												APEX SCHEDULER
+											  -------------------
+   			Apex Scheduler:-  To schedule an apex class to run on specific time.
+			
+				Note:- {The Schedulable interface contains one method that must be implemented, execute.
+							example:- global void execute(SchedulableContext sc){} 
+							method either could be a global or public only}
+
+				syntax:- global class ScheduledBatchable implements Schedulable {
+   							global void execute(SchedulableContext sc) {
+    						 // do your operations
+   							}
+						}
+
+						scheduled through corn expression from anonymous windows.
+
+ 			example:-
+                        public class scheduleExample  implements schedulable{
+                            public static void execute(SchedulableContext sc) {
+                                Account acc = new Account();
+                                acc.name = 'Table Tennis'+System.now();
+                                insert acc;
+                            }
+						}
+                            
+                           corn expression   ==> schedule from anonymous window and see in apex job in setup
+                           scheduleExample sc = new scheduleExample();
+                           String tim = '0 40 * * * ?';
+                           System.schedule('give your job name', tim, sc);
+
+		corn expression example to understand:-
+												* every
+												? not sure
+												- range 1-6
+												, random pick 5,10,23
+												# week like that see the example:- 2#6(second friday), 1#7 first saturday.
+
+					a).job at 5:00 am on 15th of march:- sec  min  hh  day  month  day-week
+													   	 0    0    5   15     3       ?
+
+					b). job on 10 15 20 on every month at 5: 30 PM:-	  sec  min  hh     day      month     day-week
+																		   0   30   17   10,15,20      *         ?
+
+					c). job on every firday 10:30 AM of november month:- sec   min  hh     day      month     day-week
+																		  0    30   10      ?        11			  6
+
+
+                                    
+              
+*/
+
+public class Notes_Of_Schedule_Apex {}
