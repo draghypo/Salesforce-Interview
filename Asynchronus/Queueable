@@ -156,3 +156,24 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
                                                                                                                                         
                                                                                         
                                                                                                                                       
+                      global void attachFinalizer(Finalizer finalizer) {} :- attachFinalizer() lets you dynamically attach a Finalizer to a Queueable job so that post-processing logic runs after the job finishes, regardless of success or failure.
+                                finalize class:- 
+                                                  public class MyFinalizer implements Finalizer {
+                                                      public void execute(FinalizerContext fc) {
+                                                          System.debug('Finalizer executed after Queueable finishes');
+                                                          System.debug('Job Id: ' + fc.getAsyncApexJobId());
+                                                          System.debug('Job Result: ' + fc.getResult());
+                                                      }
+                                                  }
+                                Queueable class: - 
+                                                  public class MyQueueable implements Queueable {
+                                                      public void execute(QueueableContext qc) {
+                                                          System.debug('Queueable is running');
+                                                  
+                                                          // Attach a separate Finalizer dynamically
+                                                          qc.attachFinalizer(new MyFinalizer());
+                                                      }
+                                                  }
+                                Job start:- System.enqueueJob(new MyQueueable());
+
+
