@@ -46,7 +46,7 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
                    |---------------------------------------------------------------------------------------|
                    | Parameter types  |  	  Complex objects, SObjects, collections	 |  Only primitives    | 
                    | Chaining	        |      Yes                                     |       	No           |
-                   | Monitoring	      |      Job appears in Setup → Apex Jobs	       |       Yes           |
+                   | Monitoring	      |      Job appears in Setup → Apex Jobs	       |        No           |
                    | Error            |       handling	Can use Finalizer	           |        No           |
                    -----------------------------------------------------------------------------------------
 *********************************************************************************************************************************************************
@@ -55,6 +55,83 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
 
       Solution Analysis: -  Doing this synchronously can hit governor limits if there are thousands of Contacts.
                             Queueable Apex can handle this asynchronously and efficiently.
-                            Future method not best for it, reason is: - Future methods cannot accept SObjects (like List<Account>).
-                                                                        You would have to pass primitive types only (e.g., List of IDs), then query the Accounts again inside the future method.
-                                                                        Extra SOQL queries → more governor limits risk.
+                            Future method not best for it, reason is: - a).Future methods cannot accept SObjects (like List<Account>).
+                                                                                  You would have to pass primitive types only (e.g., List of IDs), then query the Accounts again inside the future method.
+                                                                                  Extra SOQL queries → more governor limits risk.
+                                                                        b). Monitoring and job control : - Queueable returns a Job Id when enqueued → easier to track, abort, or log failures.
+                                                                        c). Complex business logic: - It has has multiple steps (Accounts → Related Contacts → Update) → Queueable supports bulk-safe patterns and constructor parameters.
+                                                                                                      Future methods would require re-querying data, more coding, and less maintainability.
+                            Batch class also not suitable for it, reaon is : - calling batchclass from trigger is not a best practice, because Batch has 3 phase start(), execute() and finish() so it is used for large dataset.
+                                                                                a).Queueable runs in a single async execution, much lighter.
+                                                                                b). We don’t use Batch here because the volume is not very large; Batch is designed for millions of records and adds unnecessary overhead. Queueable is lighter, faster, and better suited for medium-sized async tasks like updating related Contacts when an Account changes.
+
+          so finally go with the queueable class: - 
+                             Trigger:- 
+                                              trigger AccountTriggerTest on Account (after update) {
+                                                  List<Id> changedAccounts = new List<Id>();
+                                                  for (Account acc : Trigger.new) {
+                                                      Account oldAcc = Trigger.oldMap.get(acc.Id);
+                                                      if (acc.Industry != oldAcc.Industry) {
+                                                          changedAccounts.add(acc.Id);
+                                                      }
+                                                  }
+                                                  if (!changedAccounts.isEmpty()) {
+                                                      for (Id accId : changedAccounts) {
+                                                          System.enqueueJob(new UpdateContactsWithFinalizer(accId));
+                                                      }
+                                                  }
+                                              }
+                            Queueable class: - 
+                                          public class UpdateContactsWithFinalizer implements Queueable, Finalizer {
+                                          
+                                              private Id accountId;
+                                          
+                                              // Constructor to pass Account Id from trigger
+                                              public UpdateContactsWithFinalizer(Id accId) {
+                                                  this.accountId = accId;
+                                              }
+                                          
+                                              // Queueable execution
+                                              public void execute(QueueableContext qc) {
+                                                  List<Contact> contactsToUpdate = new List<Contact>();
+                                          
+                                                  // Query Account Industry
+                                                  Account acc = [SELECT Id, Industry FROM Account WHERE Id = :accountId LIMIT 1];
+                                          
+                                                  // Query related Contacts
+                                                  for (Contact con : [SELECT Id, Department FROM Contact WHERE AccountId = :accountId]) {
+                                                      con.Department = acc.Industry;
+                                                      contactsToUpdate.add(con);
+                                                  }
+                                          
+                                                  if (!contactsToUpdate.isEmpty()) {
+                                                      update contactsToUpdate;
+                                                  }
+                                              }
+                                          
+                                              // Finalizer method - runs always (success or failure)
+                                              public void execute(FinalizerContext fc) {
+                                                  AsyncApexJob job = [SELECT Id, Status, NumberOfErrors, ExtendedStatus 
+                                                                      FROM AsyncApexJob WHERE Id = :fc.getAsyncApexJobId()];
+                                          
+                                                  Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+                                                  mail.setToAddresses(new String[] { 'sadiquex.alam@intel.com' }); // Change recipient
+                                                  mail.setSubject('Queueable Job Result: Update Contacts');
+                                                  
+                                                  if (job.Status == 'Completed') {
+                                                      mail.setPlainTextBody('The Contacts related to Account ' + accountId + 
+                                                                            ' were updated successfully.');
+                                                  } else {
+                                                      mail.setPlainTextBody('The Queueable job failed for Account ' + accountId + 
+                                                                            '. Error: ' + job.ExtendedStatus);
+                                                  }
+                                          
+                                                  Messaging.sendEmail(new Messaging.SingleEmailMessage[] { mail });
+                                              }
+                                          }
+             
+        Note:- Finalizer Interface: - 
+
+                                              
+          
+                                                        
