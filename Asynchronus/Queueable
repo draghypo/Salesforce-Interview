@@ -23,4 +23,19 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
                                         // Enqueue the job
                                         System.enqueueJob(new MyQueueableClass(accList));
 
-            
+
+      Why we use queueable apex: - 
+                              => Async processing: Run logic that takes too long for a normal transaction.
+                                
+                              => Chaining jobs: Unlike Future methods, you can chain Queueables, meaning one job can enqueue another.
+                                
+                              => Complex objects: Can pass SObjects and complex types (Future methods can only pass primitives).
+                                
+                              => Error handling: Works with Finalizer interface to handle cleanup or retries.
+
+    How Queueable Apex work: - 
+                                You implement the Queueable interface.
+                                Override the execute(QueueableContext qc) method.
+                                Submit the job using System.enqueueJob(new MyQueueable()).
+                                Salesforce executes it asynchronously when resources are available.
+                                Optionally, implement Finalizer to run cleanup logic after the job finishes, even if it fails.
