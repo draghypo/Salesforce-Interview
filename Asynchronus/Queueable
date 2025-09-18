@@ -1,1 +1,26 @@
-Queueable:- 
+Queueable: - It is an Apex interface used to run jobs asynchronously in the background. It lets you process records outside
+              the main transaction and supports passing complex data, chaining jobs, and tracking their status.
+
+  Syntax:- public class MyQueueableClass implements Queueable {
+
+                // Constructor to pass data to the class (optional)
+                public MyQueueableClass(List<Account> accountsToProcess) {
+                    // Store the data for the execute method
+                }
+
+                // The execute method contains the logic to run asynchronously
+                public void execute(QueueableContext context) {
+                    // Your logic to process the data (e.g., update records)
+                    for (Account acc : accountsToProcess) {
+                        acc.Name = acc.Name + ' - Processed';
+                    }
+                    update accountsToProcess;
+                }
+            }
+      calling process of queueable class:- 
+                                        // Prepare data (query some accounts)
+                                        List<Account> accList = [SELECT Id, Name FROM Account LIMIT 5];
+                                        // Enqueue the job
+                                        System.enqueueJob(new MyQueueableClass(accList));
+
+            
