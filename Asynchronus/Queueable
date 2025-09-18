@@ -177,3 +177,6 @@ Queueable: - It is an Apex interface used to run jobs asynchronously in the back
                                 Job start:- System.enqueueJob(new MyQueueable());
 
 
+Note:- we can enqueue up to 50 Queueable jobs per transaction.
+
+
