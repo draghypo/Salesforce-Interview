@@ -1,1 +1,59 @@
-Future method: - 
+/*
+ 												FUTURE METHOD
+											  -----------------
+	
+		future method:-  it is used to run large job separetly means independent.
+							example:- webservices, large dml operation etc.
+
+			Point of future method:-
+									a). future method support only primitive parameter.not support sobject.but to achieve that
+											just do searilization and pass will work.
+									b). future method does not give the job id.
+									c). future method can not be called from the future method.
+									d). future method must be static and support only void return type.
+									e). to call a future method from schedule apex, trigger, for web service we need to @future(callout=true).
+									f). with in transaction we can call 50 future methods.
+
+			why we use future method:- 
+                  a).To perform a callout from trigger to avoid the exception.
+									b). To run the asynchornous process. let's understand with exmple if we decalre method with
+											future that will give log separately not dependent on the other.
+											example:- 
+												=> normal method  compare with below future method with output.
+													public class Future_Method_Example {
+                                                        public static void meth2(){
+                                                            system.debug('futurecall-1');
+                                                            system.debug('futurecall-2');
+                                                        }
+                                                        public static void meth1() {
+                                                            system.debug('normalcall-1');
+                                                            meth2();
+                                                            System.debug('normalcall-2');
+                                                        }
+                                                    }
+     								Output: - calling meth1();    normalcall-1, futurecall-1, futurecall-2, normalcall-2
+
+											public class Future_Method_Example {
+                                                @future
+                                                public static void meth2(){
+                                                    system.debug('futurecall-1');
+                                                    system.debug('futurecall-2');
+                                                }
+                                                public static void meth1() {
+                                                    system.debug('normalcall-1');
+                                                    meth2();
+                                                    System.debug('normalcall-2');
+                                                }
+                                            }
+									Output: - calling meth1():-  2log will come. output will be separate.
+
+
+
+									c). To handle the Mixed Dml exception:- while doing a dml operation on setup object and non
+										setup object then it will throw an exception Mixed Dml operation to avoid that need a
+										future method because it's run indepently.
+
+
+ */
+
+public class Notes_Of_Future_Method {}
