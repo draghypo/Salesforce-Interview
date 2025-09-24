@@ -1,4 +1,4 @@
 Flex Queue:-  It holds the batch job request till 100.
-              only 100 batch job can be scheduled. more than 100k will through exception
+              only 100 batch job can be scheduled. more than 100 will through exception
               System process only 5 job at a time once resouce become availabel it will pull from the flex queue job and process
               job order can be changed.
