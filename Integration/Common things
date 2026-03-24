@@ -32,3 +32,33 @@
                           URN: - Uniform Resource Name: - A URN is another type of URI, but it does not provide location or how to access the resource. Instead, a URN is used to uniquely identify a resource by name within a given namespace.
                                  Example of a URN:      urn:isbn:0451450523
                                             A URI that gives a unique name to a resource without telling you where it is located.but you will get data by urn as well
+
+
+
+********************************************************************************************************************************************************************
+Postman setup details:- 
+
+Oauth2.0 from postman
+------------------
+
+                  Token Name = put whatever you want
+                  
+                  Grant type = Password credentials
+                  
+                  Access Token Url = https://test.salesforce.com/services/oauth2/token
+                  
+                  client key = 3MVG9ysJNY7CaIHnXtkJBm9UdfEBBMkiiBLgNPYubCDYF0iso4CIqEXbERbl6p3dqbA61H3wWZAGYBmdQMOzm
+                  
+                  client sec = 997F25A8C4554E1506FD9172FA94F687FA86DD3F626673022EFC83F2965CA46A
+                  
+                  username=  12273253@intel.comisvcdevher
+                  
+                  password = Accellor@123
+                  
+                  client authentication = send client credentials in body
+                  
+                  now click get access token button in postman
+                  
+                  
+                  end point :=   https://isvc--isvcdevher.sandbox.my.salesforce-setup.com/services/apexrest/getWarrantyDetails?caseNumber=05142096
+***********************************************************************************************************************************************************
