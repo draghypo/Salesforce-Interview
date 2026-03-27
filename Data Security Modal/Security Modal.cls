@@ -172,6 +172,7 @@
 	a). Without Sharing :-  without sharing apex class runs in the system Context,It does not enforce the sharing rules. When we query records, 
 				all records will be fetched, even if the OWD is set to private. By default an Apex class is
 				without sharing.
+		Note:- With sharing/Without sharing / Inherited sharing work's only on Record level. 
 
 		Example :- See the below class, getBoys method will return all the records of boy object. 
 
@@ -243,6 +244,9 @@
         					return InheritedsharingPractice.getBoys();
     						}
 					}
+************************************************************************************************************************************************************************
+					WITH SECURITY_ENFORCED VS WITH USER_MODE VS Security.stripInaccessible VS Schema.SObjectType.Account.isAccessible() Etc
+
 
 
 
