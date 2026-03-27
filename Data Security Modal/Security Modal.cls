@@ -247,6 +247,28 @@
 ************************************************************************************************************************************************************************
 					WITH SECURITY_ENFORCED VS WITH USER_MODE VS Security.stripInaccessible VS Schema.SObjectType.Account.isAccessible() Etc
 
+WITH SECURITY_ENFORCED: - It was the first major step Salesforce took to simplify security in Apex. Before it existed, developers had to write dozens of lines of 
+						  Schema.SObjectType checks to ensure a user had permission to see every field in a query.
+		  Points:- 
+					1). Actually WITH SECURITY_ENFORCED do Enforce the Security to check the FLS(Field Level Security) and Object Level access check on every single field
+				        and object mentioned in the SELECT, FROM, and WHERE clauses.
+					2). It does not check on the Record level security.
+					3). It throws a System.QueryException if permissions are missing we should always wrap these queries in a try-catch block.
+					4). We can not query polymorphic fields with "WITH SECURITY_ENFORCED" like owner, whatid or whoid.
+                 polymorphic fields:- suppose owner field, owner can be a user or queue. so modern fix is WITH USER_MODE.
+      Syntax:-  List<Account> accs = [SELECT Id, Name,Industry FROM Account WITH SECURITY_ENFORCED];  it will check the object level and FLS as well if any of 
+							those field does not have an access it thorws an exception System.queryException.so use try and catch block.
+
+	example with error handling: - try {
+										    // Attempting to query a sensitive field
+										    List<Contact> contacts = [SELECT Id, Social_Security_Number__c FROM Contact WITH SECURITY_ENFORCED];
+										} catch (System.QueryException e) {
+										    // If the user lacks FLS for the SSN field, the code jumps here
+										    System.debug('Insufficient permissions: ' + e.getMessage());
+										}
+										
+
+
 
 
 
