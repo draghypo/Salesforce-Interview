@@ -298,6 +298,22 @@ WITH SECURITY_ENFORCED: -
 			Execution Mode					Strictly User Context												User context on only soql
 			Database Methods			Supports AccessLevel.USER_MODE												Not applicable.
 
+Security.stripInaccessible
+--------------------------------
+
+		Security.stripInaccessible:- This method is the "graceful" security filter in Apex. Unlike the strict keywords (WITH USER_MODE), it does not crash 
+									 your code, it simply "sanitizes" your data by removing what the user isn't allowed to see or edit.
+
+				Points: - 
+							1). It can be used post query.
+							2). It does not check OWD Sharing rules need to add with sharing etc.
+							3). It removes the field which does not have an access and keep running the transaction.
+				summary: - Use stripInaccessible when you want to sanitize data without stopping the execution flow. It is the best choice for "soft" security enforcement
+							where a partial result is better than a total failure.
+
+				Syntax:-  List<Contact> rawContacts = [SELECT FirstName, LastName, Secret_Note__c FROM Contact];
+							// Sanitize the list
+							SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, rawContacts);
 
 
 
