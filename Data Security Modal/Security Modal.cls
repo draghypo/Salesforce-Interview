@@ -285,8 +285,9 @@ WITH SECURITY_ENFORCED: -
 
 
 	 Comparison Table
-
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
 			Feature                        		 WITH USER_MODE                                             				WITH SECURITY_ENFORCED
+	--------------------------------------------------------------------------------------------------------------------------------------------------
             Primary Purpose				Modern, all-in-one security enforcement everything.						Legacy SOQL-only field/object filtering.
 			Apex Version					API 58.0 and higher.,															API 45.0 to 57.0 (Legacy).
 			Supported Operations			SOQL and DML (insert, update, etc.)												SOQL Only.
@@ -297,6 +298,7 @@ WITH SECURITY_ENFORCED: -
 			Polymorphic Fields			Supported. Handles Owner, WhatId, etc									Limited. Often fails on complex lookups.
 			Execution Mode					Strictly User Context												User context on only soql
 			Database Methods			Supports AccessLevel.USER_MODE												Not applicable.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Security.stripInaccessible
 --------------------------------
@@ -352,6 +354,17 @@ Security.stripInaccessible
 									        insert decision.getRecords();
 									}
 
+Comparison Table between WITH USER_MODE	VS Security.stripInaccessible method
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+			Feature										WITH USER_MODE										Security.stripInaccessible
+        -------------------------------------------------------------------------------------------------------------------------------
+			Philosophy									Stop All or nothing									 Sift: Keep what is allowed
+			Primary									 UseCore business logic/Integrity						UI Grids, Search, & External APIs
+			Sharing Rules								Always Enforced.										Ignored (Needs with sharing).	
+			Field Access							Throws SecurityException										Nulls out the field	
+			DML Syntax									insert as user myObj;								Requires pre-processing steps
+			System Fields								Respects all permissions								Never strips Id or OwnerId.
+------------------------------------------------------------------------------------------------------------------------------------------------------
 						
 
 
