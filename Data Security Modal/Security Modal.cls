@@ -315,7 +315,44 @@ Security.stripInaccessible
 							// Sanitize the list
 							SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, rawContacts);
 
+			 Access Type : - We must tell Salesforce what we are trying to do. Use the AccessType enum:
 
+							AccessType.READABLE: Filter fields for a SELECT query.
+							
+							AccessType.CREATEABLE: Filter fields before an INSERT.
+							
+							AccessType.UPDATABLE: Filter fields before an UPDATE.
+							
+							AccessType.UPSERTABLE: Filter fields before an UPSERT.
+
+					SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, listAccounts);
+								Extract the Removed Fields Map
+					Map<String, Set<String>> removedFieldsMap = decision.getRemovedFields(); // where key as an object and values are fields.
+			
+		example: -  		READABLE
+
+							@AuraEnabled(cacheable=true)
+							    public static List<Account> searchAccounts(String searchKey) {
+							        String query = 'SELECT Name, Phone, Social_Security_Number__c FROM Account WHERE Name LIKE :searchKey';
+							        List<Account> rawResults = Database.query(query);
+							        // STRIP fields the user isn't allowed to Social_Security_Number__c
+							        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, rawResults); // removed unacess fields.
+							        Map<String, Set<String>> removedFields = decision.getRemovedFields();
+							        // Returns Name and Phone; Social_Security_Number__c is automatically removed for unauthorized users
+							        return (List<Account>) decision.getRecords();
+							    }
+
+							CREATABLE
+
+									public static void detailsOfStipInAccessible() {
+											Lead newLead = new Lead(FirstName = 'John',LastName = 'Doe',Rating = 'Hot' /* User shouldn't be able to set this*/);
+									        // Strip fields the user is not allowed to CREATE
+									        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.CREATABLE,new List<Lead>{newLead});
+									        // The 'clean' lead will have Name, but Rating and Notes will be NULL
+									        insert decision.getRecords();
+									}
+
+						
 
 
 
