@@ -365,6 +365,11 @@ Comparison Table between WITH USER_MODE	VS Security.stripInaccessible method
 			DML Syntax									insert as user myObj;								Requires pre-processing steps
 			System Fields								Respects all permissions								Never strips Id or OwnerId.
 ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Schema method not recommended sytax details:- 
+				Object check: - if (Schema.sObjectType.Account.isAccessible()) {}
+				Fields checks: - if (Schema.sObjectType.Account.fields.Phone.isAccessible()) {}
 						
 
 
