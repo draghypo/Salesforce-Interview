@@ -286,17 +286,17 @@ WITH SECURITY_ENFORCED: -
 
 	 Comparison Table
 
-			Feature                         WITH USER_MODE                                             WITH SECURITY_ENFORCED
-            Primary Purpose,"Modern, all-in-one security enforcement.",Legacy SOQL-only field/object filtering.
-Apex Version,API 58.0 and higher.,API 45.0 to 57.0 (Legacy).
-Supported Operations,"SOQL and DML (insert, update, etc.).",SOQL Only.
-Object/CRUD Checks,Yes.,Yes.
-Field/FLS Checks,Yes.,Yes.
-Record-Level Sharing,Yes (Automatic). Overrides class header.,No. Requires with sharing on the class.
-Exception Thrown,System.SecurityException,System.QueryException
-Polymorphic Fields,"Supported. Handles Owner, WhatId, etc.",Limited. Often fails on complex lookups.
-Execution Mode,Strictly User Context.,Schema-filter within the existing context.
-Database Methods,Supports AccessLevel.USER_MODE.,Not applicable.
+			Feature                        		 WITH USER_MODE                                             				WITH SECURITY_ENFORCED
+            Primary Purpose				Modern, all-in-one security enforcement everything.						Legacy SOQL-only field/object filtering.
+			Apex Version					API 58.0 and higher.,															API 45.0 to 57.0 (Legacy).
+			Supported Operations			SOQL and DML (insert, update, etc.)												SOQL Only.
+			Object/CRUD Checks,						Yes																		Yes		
+			Field/FLS Checks						Yes																		Yes
+			Record-Level Sharing,		Yes (Automatic). Overrides class header. 								No. Requires with sharing on the class.
+			Exception Thrown				System.SecurityException												System.QueryException
+			Polymorphic Fields			Supported. Handles Owner, WhatId, etc									Limited. Often fails on complex lookups.
+			Execution Mode					Strictly User Context												User context on only soql
+			Database Methods			Supports AccessLevel.USER_MODE												Not applicable.
 
 
 
