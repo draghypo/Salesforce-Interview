@@ -1,0 +1,18 @@
+                                                SavePoint And RollBack Transaction
+                                          ----------------------------------------------
+
+Example with details: -   SavePoint and Rollback it does control the transaction.
+
+                            public static void rollBackDetails() {
+                                    Account acc = new Account(Name='RollBackTest');
+                                    Contact con = new Contact(Email = 'sadiq@yahoo.com'); // DML Fail due to last Name.
+                                   	SavePoint sp = Database.setSavePoint();
+                                    try {
+                              			  insert as user acc;  // account will be inserted.
+                                   		insert as user con; // contact will be failed due to mandatory field. it will go to catch block
+                                    }
+                                    Catch(Exception ex) {
+                                        System.debug('Exception occured in the transaction, details='+ex.getMessage());
+                                        Database.rollBack(sp); // all transaction rolled back whatever dml placed between savepoint and rollback statement.
+                                    }
+                                }
