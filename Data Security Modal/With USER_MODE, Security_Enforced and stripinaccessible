@@ -1,0 +1,131 @@
+************************************************************************************************************************************************************************
+					WITH SECURITY_ENFORCED VS WITH USER_MODE VS Security.stripInaccessible VS Schema.SObjectType.Account.isAccessible() Etc
+					***********************************************************************************************************************
+
+WITH SECURITY_ENFORCED: - 
+--------------------------
+					It was the first major step Salesforce took to simplify security in Apex. Before it existed, developers had to write dozens of lines of 
+					  Schema.SObjectType checks to ensure a user had permission to see every field in a query.
+		  Points:- 
+					1). Actually WITH SECURITY_ENFORCED do Enforce the Security to check the FLS(Field Level Security) and Object Level access check on every single field
+				        and object mentioned in the SELECT, FROM, and WHERE clauses.
+					2). It does not check on the Record level security, like owd sharing rules.
+					3). It throws a System.QueryException if permissions are missing we should always wrap these queries in a try-catch block.
+					4). We can not query polymorphic fields with "WITH SECURITY_ENFORCED" like owner, whatid or whoid.
+                 polymorphic fields:- suppose owner field, owner can be a user or queue. so modern fix is WITH USER_MODE.
+      	Syntax:-  List<Account> accs = [SELECT Id, Name,Industry FROM Account WITH SECURITY_ENFORCED];  it will check the object level and FLS as well if any of 
+							those field does not have an access it thorws an exception System.queryException.so use try and catch block.
+
+			example with error handling: - try {
+										    // Attempting to query a sensitive field
+										    List<Contact> contacts = [SELECT Id, Social_Security_Number__c FROM Contact WITH SECURITY_ENFORCED];
+										} catch (System.QueryException e) {
+										    // If the user lacks FLS for the SSN field, the code jumps here
+										    System.debug('Insufficient permissions: ' + e.getMessage());
+										}
+
+	WITH USER_MODE: - (The Modern Standard)
+---------------------------
+		Points: - 
+				Definition: A comprehensive security keyword that enforces CRUD (Object-level), FLS (Field-level), and Sharing Rules (Record-level) in a single operation.		
+				Scope: Works for both SOQL queries and DML statements (insert, update, upsert, delete, merge).
+				Sharing: Always respects OWD and Sharing Rules, regardless of whether the class is marked with sharing or without sharing.
+				Error Handling: Throws a System.SecurityException if any permission check fails.
+		Syntax:  [SELECT Id FROM Account WITH USER_MODE]
+	
+		DML: insert as user myAccount; 
+			 Database Methods: Database.insert(record, true, AccessLevel.USER_MODE);
+			 Best For: All new development, UI-driven logic, and external API integrations.
+
+
+	 Comparison Table
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+			Feature                        		 WITH USER_MODE                                             				WITH SECURITY_ENFORCED
+	--------------------------------------------------------------------------------------------------------------------------------------------------
+            Primary Purpose				Modern, all-in-one security enforcement everything.						Legacy SOQL-only field/object filtering.
+			Apex Version					API 58.0 and higher.,															API 45.0 to 57.0 (Legacy).
+			Supported Operations			SOQL and DML (insert, update, etc.)												SOQL Only.
+			Object/CRUD Checks,						Yes																		Yes		
+			Field/FLS Checks						Yes																		Yes
+			Record-Level Sharing,		Yes (Automatic). Overrides class header. 								No. Requires with sharing on the class.
+			Exception Thrown				System.SecurityException												System.QueryException
+			Polymorphic Fields			Supported. Handles Owner, WhatId, etc									Limited. Often fails on complex lookups.
+			Execution Mode					Strictly User Context												User context on only soql
+			Database Methods			Supports AccessLevel.USER_MODE												Not applicable.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Security.stripInaccessible
+--------------------------------
+
+		Security.stripInaccessible:- This method is the "graceful" security filter in Apex. Unlike the strict keywords (WITH USER_MODE), it does not crash 
+									 your code, it simply "sanitizes" your data by removing what the user isn't allowed to see or edit.
+
+				Points: - 
+							1). It can be used post query.
+							2). It does not check OWD Sharing rules need to add with sharing etc.
+							3). It removes the field which does not have an access and keep running the transaction.
+				summary: - Use stripInaccessible when you want to sanitize data without stopping the execution flow. It is the best choice for "soft" security enforcement
+							where a partial result is better than a total failure.
+
+				Syntax:-  List<Contact> rawContacts = [SELECT FirstName, LastName, Secret_Note__c FROM Contact];
+							// Sanitize the list
+							SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, rawContacts);
+
+			 Access Type : - We must tell Salesforce what we are trying to do. Use the AccessType enum:
+
+							AccessType.READABLE: Filter fields for a SELECT query.
+							
+							AccessType.CREATEABLE: Filter fields before an INSERT.
+							
+							AccessType.UPDATABLE: Filter fields before an UPDATE.
+							
+							AccessType.UPSERTABLE: Filter fields before an UPSERT.
+
+					SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, listAccounts);
+								Extract the Removed Fields Map
+					Map<String, Set<String>> removedFieldsMap = decision.getRemovedFields(); // where key as an object and values are fields.
+			
+		example: -  		READABLE
+
+							@AuraEnabled(cacheable=true)
+							    public static List<Account> searchAccounts(String searchKey) {
+							        String query = 'SELECT Name, Phone, Social_Security_Number__c FROM Account WHERE Name LIKE :searchKey';
+							        List<Account> rawResults = Database.query(query);
+							        // STRIP fields the user isn't allowed to Social_Security_Number__c
+							        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.READABLE, rawResults); // removed unacess fields.
+							        Map<String, Set<String>> removedFields = decision.getRemovedFields();
+							        // Returns Name and Phone; Social_Security_Number__c is automatically removed for unauthorized users
+							        return (List<Account>) decision.getRecords();
+							    }
+
+							CREATABLE
+
+									public static void detailsOfStipInAccessible() {
+											Lead newLead = new Lead(FirstName = 'John',LastName = 'Doe',Rating = 'Hot' /* User shouldn't be able to set this*/);
+									        // Strip fields the user is not allowed to CREATE
+									        SObjectAccessDecision decision = Security.stripInaccessible(AccessType.CREATABLE,new List<Lead>{newLead});
+									        // The 'clean' lead will have Name, but Rating and Notes will be NULL
+									        insert decision.getRecords();
+									}
+
+Comparison Table between WITH USER_MODE	VS Security.stripInaccessible method
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+			Feature										WITH USER_MODE										Security.stripInaccessible
+        -------------------------------------------------------------------------------------------------------------------------------
+			Philosophy									Stop All or nothing									 Sift: Keep what is allowed
+			Primary									 UseCore business logic/Integrity						UI Grids, Search, & External APIs
+			Sharing Rules								Always Enforced.										Ignored (Needs with sharing).	
+			Field Access							Throws SecurityException										Nulls out the field	
+			DML Syntax									insert as user myObj;								Requires pre-processing steps
+			System Fields								Respects all permissions								Never strips Id or OwnerId.
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Schema method not recommended sytax details:- 
+				Object check: - if (Schema.sObjectType.Account.isAccessible()) {}
+				Fields checks: - if (Schema.sObjectType.Account.fields.Phone.isAccessible()) {}
+						
+
+
+
+
