@@ -1,0 +1,69 @@
+          Apex Sharing:-  it allows us to programmatically assign access to the records using an Apex class,  who can view or edit 
+        -------------------------------------                                   specific records based on your business requirements.
+
+                Note:- for every custom object there is share object and even for some standard as well (Account, contact, case,lead etc).
+                    :- Account --> AccountShare, contact-->contactShare etc.
+                    :- for custom object instead of adding __C in the last add share only. eg:- Project__c --> Project__share.
+
+                a). Scenario 1:- As we have two users Lavanya and Imran , When a account is created or updated by lavanya, then only it
+                                 should be accessable by imran, as OWD is private.
+                        Solution:- 
+                            Trigger:-
+                                         trigger ApexSharing on Account (after insert, after update) {
+                                            if(Trigger.isAfter || Trigger.isUpdate) {
+                                            SharingPractice.shareAccountRecordsToUserA(Trigger.New);
+                                            }
+                                        }
+                            Apex Handler:- 
+                                        public class SharingPractice {
+                                            public static void shareAccountRecordsToUserA(List<Account> accList) {
+                                                List<AccountShare> accShareList = new List<AccountShare>();  
+                                                User toUser = [select id from user where username='pmimran@accellor.com' limit 1];
+                                                User recordCreated = [select id from user where username='pmlavanya@accellor.com'];
+                                                for(Account accRecords : accList) {
+                                                    if(accRecords.CreatedById == recordCreated.Id) {
+                                                        AccountShare accShare = new AccountShare();
+                                                        accShare.AccountId = accRecords.Id;   		// Required field
+                                                        accShare.AccountAccessLevel = 'Read';  	   // Required field
+                                                        accShare.OpportunityAccessLevel = 'Read'; // Required field
+                                                        accShare.UserOrGroupId = toUser.id;      // Required field
+                                                        accShareList.add(accShare);
+                                                    }
+                                                }
+                                                if(accShareList.size() > 0) {
+                                                    insert accShareList;
+                                                }
+                                            }  
+                                        }
+
+                b). Scenario 2nd on custom object:- we have two users lavanya and imran, whenever a custom object record is created
+                                                    or updated by lavanya it should be accessable by imran as OWD is private.
+
+                            Solution:- original object name Boy__C and shar object Boy__share
+
+                            Trigger:- 
+                                trigger ApexSharingBoyObject on Boy__c (after insert,after update) {
+                                    if(Trigger.isAfter || Trigger.isUpdate) {
+                                        SharingPractice.shareBoyCustomObject(Trigger.New);
+                                    }
+                                }
+                            Handler class:- 
+                                public class SharingPractice {
+                                    public static void shareBoyCustomObject(List<Boy__c> boyList) {
+                                        List<Boy__share> boyShareList = new List<Boy__share>();  
+                                        User toUser = [select id from user where username='pmimran@accellor.com' limit 1];
+                                        User recordCreated = [select id from user where username='pmlavanya@accellor.com'];
+                                        for(Boy__c boyRecords : boyList) {
+                                            if(boyRecords.CreatedById == recordCreated.Id) {
+                                                Boy__share boyShare = new Boy__share();
+                                                boyShare.AccessLevel = 'read';  		// Required field
+                                                boyShare.ParentId = boyRecords.id;     // Required field
+                                                boyShare.UserOrGroupId = toUser.id;   // Required field
+                                                boyShareList.add(boyShare);
+                                            }
+                                        }
+                                        if(boyShareList.size() > 0) {
+                                            insert boyShareList;
+                                        }
+                                    }
+                                }
