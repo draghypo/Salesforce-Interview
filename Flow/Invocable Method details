@@ -1,6 +1,20 @@
 Invocable Method: - Apex method which decalared @InvocableMethod anotation to call this from flow and pass the data.
 
-Syntax with Example: - 
+    To make a method "Invocable" you must follow these strict rules: - 
+                        1). Annotation Must use @InvocableMethod.
+                        2). Method must be static.
+                        3). Method can be a public or global.
+                        4). It can only take one input parameter.
+                        5). Parameter must be a List.
+                        6). It must return either void or a List.
+                        7). we can only have one @InvocableMethod in a single Apex class.
+
+
+    Inside the @InvocableMethod parentheses, you can define: - 
+                                                              1). label: What the user sees in the Flow Builder search.
+                                                              2). description: Explains what the action does.
+
+    Syntax with Example: - 
                         @InvocableMethod(label='calling apex method from flow ' description='Receives a string and performs logic')
                             public static void receiveString(List<String> inputStrings) {
                                 // Salesforce sends a list; loop through it to get your value
