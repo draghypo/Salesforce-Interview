@@ -18,6 +18,21 @@
                               }    
                           }
                       }
+
+
+2nd approach:- 
+                      trigger AccountTrigger on Account (before delete) {
+                          Set<Id> accountIds = Trigger.oldMap.keySet();
+                          Map<Id, Account> accountsWithContacts = new Map<Id, Account>([SELECT Id FROM Account WHERE Id IN :accountIds AND Id IN (SELECT AccountId FROM Contact)]);
+                          for (Account acc : Trigger.old) {
+                              if (accountsWithContacts.containsKey(acc.Id)) {
+                                  acc.addError('You cannot delete this Account because it has related Contacts. Please delete or re-parent the Contacts first.');
+                              }
+                          }
+                      }
+                      
+
+
 *************************************************************************************************************************************
 Rollup summary achievement Account contact through contact:- 
 Trigger:-  trigger ParentAchiever on Contact (After insert, After update, After delete, After undelete) {
