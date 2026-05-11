@@ -17,3 +17,101 @@ Lightning Message Service (LMS) : - It enables you to to communicate between Two
                                                     	<isExposed>true</isExposed>
                                                     	<description>This is channel is used to carry the data for two independent component.</description>	
                                                     </LightningMessageChannel>
+
+                     Message channel got created, import it by adding __c in the channel name in the lwc.
+                    eg: - import SAMPLEMC from "@salesforce/messageChannel/sampleSadiqChannel__c"
+          *****************************************************************************************************************
+     
+Now create a Two LWC component As I have created in my org with the below Names: - 
+                    1). p_2026_LMS_A_Component
+                    2). p_2026_LMS_B_Component
+
+          Code of p_2026_LMS_A_Component: - 
+                                        JS: - 
+                                   ----------------
+                                             import { LightningElement, wire } from 'lwc';
+                                             import SAMPLEMC from "@salesforce/messageChannel/sampleSadiqChannel__c"
+                                             import {MessageContext, publish} from 'lightning/messageService'
+                                             export default class P_2026_LMS_A_Component extends LightningElement {
+                                                 inputValue
+                                             
+                                                 @wire(MessageContext)
+                                                 context
+                                             
+                                                 inputHandler(event){
+                                                     this.inputValue = event.target.value
+                                                 }
+                                             
+                                                 publishMessage(){
+                                                     const message={
+                                                         lmsData:{
+                                                             value:this.inputValue,
+                                                             FullName: 'Sadique Alam',
+                                                             RollNumber : '1234'
+                                                         }
+                                                     }
+                                                     //publish(messageContext, messageChannel, message)
+                                                     publish(this.context, SAMPLEMC, message)
+                                                 }
+                                             }
+                                        Html
+                                   ---------------
+                                        <template>
+                                            <lightning-card title="LWC to LWC Communication LMS Component A">
+                                                <div class="slds-m-around_medium">
+                                                    <lightning-input type="text" label="Enter message to publish" 
+                                                    onkeyup={inputHandler}></lightning-input>
+                                                </div>
+                                                <div class="slds-m-around_medium">
+                                                    <lightning-button label="Publish" onclick={publishMessage}></lightning-button>
+                                                </div>
+                                            </lightning-card>
+                                        </template>
+
+          Code of P_2026_LMS_B_Component: - 
+                                        JS: - 
+                                   ----------------
+                                                  import { LightningElement, wire } from 'lwc';
+                                                  import SAMPLEMC from "@salesforce/messageChannel/sampleSadiqChannel__c"
+                                                  import {subscribe, MessageContext, APPLICATION_SCOPE, unsubscribe} from 'lightning/messageService';
+                                                  export default class P_2026_LMS_B_Component extends LightningElement {
+                                                      recievedMessage
+                                                      subscription
+                                                      @wire(MessageContext)
+                                                      context
+                                                  
+                                                      connectedCallback(){
+                                                          this.subscribeMessage()
+                                                      }
+                                                  
+                                                      subscribeMessage(){
+                                                          //subscribe(messageContext, messageChannel, listener, subscriberOptions)
+                                                          this.subscription= subscribe(this.context, SAMPLEMC, (message)=>{this.handleMessage(message)}, {scope:APPLICATION_SCOPE})
+                                                      }
+                                                  
+                                                      handleMessage(message){
+                                                          this.recievedMessage = message.lmsData.value? message.lmsData.value :'NO Message published'
+                                                          window.alert('Hardcoded value came: - ',message.lmsData.FullName);
+                                                          console.log('Hardcoded value came: - ',message.lmsData.FullName);
+                                                      }
+                                                  
+                                                      unsubscribeMessage(){
+                                                          unsubscribe(this.subscription)
+                                                          this.subscription = null
+                                                      }
+                                                      
+                                                  }
+                                        Html
+                                   ---------------
+                                                  <template>
+                                                      <lightning-card title="LWC to LWC Communication LMS LMS Component B">
+                                                          <div class="slds-m-around_medium">
+                                                             <lightning-button label="unsubscribe" onclick={unsubscribeMessage}></lightning-button>
+                                                          </div>
+                                                          <div class="slds-m-around_medium">
+                                                              Message Recieved <strong>{recievedMessage}</strong>
+                                                          </div>
+                                                  
+                                                      </lightning-card>
+                                                  </template>
+               *******************************code end *************************************************************
