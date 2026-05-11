@@ -115,3 +115,33 @@ Now create a Two LWC component As I have created in my org with the below Names:
                                                       </lightning-card>
                                                   </template>
                *******************************code end *************************************************************
+
+     Below are the things has been provided by the 'lightning/messageService' library: - 
+
+                    1). MessageContext: - It connects component to the LMS using the @wire service.
+                              syntax: -  @wire(MessageContext)
+                                             context
+                    2). publish: - It Send's the data packet to the message channel.
+                              syntax: -   publish(this.context, ImportedMessageChannel, PublishingData)
+                    3). subscribe: - It recieve the data packet from the message channel through MessageContext.
+                              syntax: - this.subscription = subscribe(this.context, ImportedMessageChannel, (message)=>{this.customMethodCalling(message)}, {scope:APPLICATION_SCOPE})
+
+                    4). unsubscribe: - It unsubscribe the channel, so it stop the listener immediatily.
+                              syntax: - unsubscribe(this.subscription), this.subscription is subscription object.
+
+                    5). createMessageContext: - It is the manual way to establish a connection to the Lightning Message Service.
+                    6). releaseMessageContext: - It is the manual way to remove a connection to the Lightning Message Service.
+
+     APPLICATION_SCOPE : - you are telling the LMS Engine to ignore the tab boundary.
+
+
+
+
+
+
+
+
+
+
+
+
