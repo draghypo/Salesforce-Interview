@@ -1,1 +1,19 @@
-LMS
+Lightning Message Service (LMS) : - It enables you to to communicate between Two Independent component without any relation.
+     Before implementing LMS we have some prerequisites:- 
+                          1). Create a MessageChannel :- 
+                                    a). Need a development environmnet like vs code or some editor
+                                    b). Navigate to: force-app/main/default/   
+                                    c). Create a folder named messageChannels (if not exist) name is case-sensitive.
+                                    d). Create a new file inside that folder
+                                    e). File Name like ChannelName.messageChannel-meta.xml
+                                                            Example: sampleSadiqChannel.messageChannel-meta.xml
+                                    f). copy the metadata code from browser and paste and make the neccessary changes like exposed true, name.
+                                    g). deployed the file to the org.
+                              
+                        channel metadata code:- 
+                                                    <?xml version="1.0" encoding="UTF-8"?>
+                                                    <LightningMessageChannel xmlns="http://soap.sforce.com/2006/04/metadata">
+                                                    	<masterLabel>sampleSadiqChannel</masterLabel>
+                                                    	<isExposed>true</isExposed>
+                                                    	<description>This is channel is used to carry the data for two independent component.</description>	
+                                                    </LightningMessageChannel>
