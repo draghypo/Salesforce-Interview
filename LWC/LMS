@@ -214,6 +214,13 @@ LWC to Aura and Vf page and vice versa means permutation and combination:-
                               Aura existing component
                               VF Page below one.
 
+
+few details: - 
+          1. Get Channel :-let SAMPLEMC  ="{!$MessageChannel.sampleSadiqChannel__c}"  :- get the channel details in vf page.
+          2. publish: - sforce.one.publish(SAMPLEMC, message)  put inside the method to execut.
+          3. Subscribe: - subscriptionToMC = sforce.one.subscribe(SAMPLEMC, msgHandler, {scope:"APPLICATION"})
+          4. unsubscribe: - sforce.one.unsubscribe(subscriptionToMC)
+
 Visula force page name in org:- LMS_LWC_To_Aura_VF_And_Viceversa
 
                                         <apex:page lightningStylesheets="true">
