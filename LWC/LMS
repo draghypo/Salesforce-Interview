@@ -140,6 +140,18 @@ Now create a Two LWC component As I have created in my org with the below Names:
 LWC to Aura and Aura to LWC Communication using LMS: - As in my org alredy we have setuped the Message Channel and communicated
                               between LWc to LWC, now here we are communicating LWC to Aura and Aura to LWC.
 
+Few details in Aura:- 
+               1. To Get channel: - <lightning:messageChannel type="sampleSadiqChannel__c" aura:id="SampleMessageChannel" onMessage="{!c.handleMessage}" scope="APPLICATION" />
+               2. Publish: - component.find("SampleMessageChannel").publish(message)
+               3. Subscribe: - in the channel need to get the message see the code below
+                                                                           {
+                                                                               handleMessage:function(component, message){
+                                                                                   if(message != null && message.getParam("lmsData") !=null){
+                                                                                       component.set("v.messageRecieved", message.getParam("lmsData").value)
+                                                                                   }
+                                                                               }
+
+
      component details:- 
           1). LWC publish p_2026_LMS_A_Component
           2). LWC Subscribe p_2026_LMS_B_Component
