@@ -134,6 +134,80 @@ Now create a Two LWC component As I have created in my org with the below Names:
 
      APPLICATION_SCOPE : - you are telling the LMS Engine to ignore the tab boundary.
 
+*****************************************************************************************************************************
+                                   LMS Aura to LWC and LWC to Aura
+
+LWC to Aura and Aura to LWC Communication using LMS: - As in my org alredy we have setuped the Message Channel and communicated
+                              between LWc to LWC, now here we are communicating LWC to Aura and Aura to LWC.
+
+     component details:- 
+          1). LWC publish p_2026_LMS_A_Component
+          2). LWC Subscribe p_2026_LMS_B_Component
+          3). Aura pulish and subcribe both are in the one component and two lwccomponent code is above.
+                    refer p_2026_LMS_A_Component and p_2026_LMS_B_Component LWC component.
+
+
+Aura Component details:- 
+     search with "LMS_Aura_Component aura" component in the org.
+
+            Compo
+          ------------
+                         <aura:component implements="flexipage:availableForAllPageTypes" access="global">
+                         <aura:attribute name="messageValue" type="String"/>
+                         <aura:attribute name="messageRecieved" type="String"/>
+                         
+                         <lightning:messageChannel
+                             type="sampleSadiqChannel__c"
+                             aura:id="SampleMessageChannel"
+                             onMessage="{!c.handleMessage}"
+                             scope="APPLICATION"
+                         />
+                             <lightning:card title="LMS Aura Component">
+                                 <div class="slds-p-around_medium">
+                                     <label>Enter publish message</label>
+                                     <input type="text"
+                                     id="messageInput"
+                                     name="messageInput"
+                                     class="slds-input"
+                                     value="{!v.messageValue}"
+                                     onkeyup="{!c.inputHandler}"/>
+                                 </div>
+                                 <div class="slds-p-around_medium">
+                                     <lightning:button onclick="{!c.publishMessage}">Publish</lightning:button>
+                                 </div>
+                         
+                                 <div class="slds-p-around_medium">
+                                     <h1><strong>Message Recieved</strong></h1>
+                                     <lightning:formattedText value="{!v.messageRecieved}"/>
+                                 </div>
+                             </lightning:card>
+                         </aura:component>	
+
+     Controller
+----------------------
+                         ({
+                             handleMessage:function(component, message){
+                                 if(message != null && message.getParam("lmsData") !=null){
+                                     component.set("v.messageRecieved", message.getParam("lmsData").value)
+                                 }
+                             },
+                             inputHandler:function(component, event){
+                                 console.log(event.target.value)
+                                 component.set("v.messageValue", event.target.value)
+                             },
+                             publishMessage:function(component){
+                                 let msg = component.get("v.messageValue")
+                                 let message={
+                                     lmsData:{
+                                         value:msg
+                                     }
+                                 }
+                                 component.find("SampleMessageChannel").publish(message)
+                             }
+                         })
+
+*********************************************************************************************************************************
+
 
 
 
