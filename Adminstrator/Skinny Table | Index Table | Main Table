@@ -1,2 +1,19 @@
                                 Skinny Table | Index Table | Main Table
                         -------------------------------------------------------------
+
+    Skinny Table; - Skinny Table is combination of standard field and custom field, used to optimize performance for objects
+                    with Large Data Volumes (LDV).
+
+      Notes:- If we query standard field and custom field on object behind the seen join happens. as in salesforce standard
+              field is having a separate table and custom field is having a separate table.After joining it return the record.
+              if recod is more than 1 million performance got slow, agent feel bore so skinny table come in to picture. salesforce
+              customer support will create the skinny table we need to provide the details of field which all field needs to be
+              added. later if want to add more field need to connect again to the customer support.once the skinny table got
+              created and if we query it will go to the skinny table if all field is added in to the skinny table it fetch from
+              the skinny table else go to the main table like need join and take time.
+    Points: -
+            1. A Skinny Table can hold a maximum of 200 columns (fields).
+            2. Skinny Tables completely ignore and exclude soft-deleted records that is availbe in recyclebin.
+            3. skinny table does not support formula, long text area, Rich text area, picklist etc.
+            
+
