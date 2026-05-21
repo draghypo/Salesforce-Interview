@@ -37,3 +37,10 @@
 
 
 ****************************************************************************************************************************
+                                          Main Table
+                                      -------------------
+
+  Main Table: - This is the table where we store the all records. if Index filed does not have then go with the main table.
+
+    eg: - querying a record and where condition is on record id or unique id it will tell the salesforce query optimizer 
+          go with this particular index in the main table.
