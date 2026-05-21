@@ -15,5 +15,25 @@
             1. A Skinny Table can hold a maximum of 200 columns (fields).
             2. Skinny Tables completely ignore and exclude soft-deleted records that is availbe in recyclebin.
             3. skinny table does not support formula, long text area, Rich text area, picklist etc.
-            
 
+*****************************************************************************************************************************
+                                          Index Table
+                                    ------------------------
+    Index Table: - Index Table is a highly specialized database table used by the platform to dramatically speed up data 
+                    retrieval for queries, reports, and list views. Instead of storing full object records with all 
+                    their custom fields, the Index Table isolates and stores only one specific field value paired directly
+                    with its unique Salesforce Recordid, standard field,custom unique field and external id field.
+
+      Notes:- process of addingcustom field to the index table: - Need to make the field unique or make external field.
+              we have record Id in Index table this know the record where it is available no need to search details one by one
+
+  Points: - 
+          1. You can only have a maximum of 25 custom fields marked as External ID or Unique per object. If you need 
+              more fields indexed beyond that, you must ask Salesforce Support to create a Custom Index.
+
+          2. Selectivity Threshold: Standard Indexed fields must return less than 30% of the total records.
+                                   - Custom Indexed fields must return less than 10% of the total records.
+             If a query returns more than these percentages, Salesforce ignores the Index Table and scans the main table.
+
+
+****************************************************************************************************************************
