@@ -156,31 +156,34 @@ Handler class to know the publish successful or fail based on creating a task.
 
           3). LWC : - through lightning/empApi .
 
+                Syntax: - import { subscribe, unsubscribe, onError, isEmpEnabled } from 'lightning/empApi';
+
                 Js code
               ----------
 
-                      import { LightningElement, api } from 'lwc';
-                      import { subscribe } from 'lightning/empApi';
-                      
-                      export default class LattestAccountWithoutRefresh extends LightningElement {
-                          // Replace with your actual Platform Event API Name (must end in __e)
-                          channelName = '/event/Order_Detail__e'; 
-                      
-                          // connectedCallback runs automatically when the component loads
-                          connectedCallback() {
-                              // Callback function to handle incoming events
-                              const messageCallback = (response) => {
-                                  console.log('New Platform Event received: ', JSON.stringify(response.data.payload));
-                              };
-                      
-                              // Subscribe to the channel (-1 specifies we want new events only)
-                              subscribe(this.channelName, -1, messageCallback)
-                                  .then(response => {
-                                      console.log('Successfully subscribed to: ', response.channel);
-                                  });
-                          }
+                  import { LightningElement } from 'lwc';
+                  import { subscribe } from 'lightning/empApi';
+                  
+                  export default class LattestAccountWithoutRefresh extends LightningElement {
+                      channelName = '/event/Order_Detail__e';  // replace your platform event name
+                  
+                      connectedCallback() {
+                          this.startListening();
                       }
-                                                
-                                                                              
-                                                                                                                                        
-                                                                                          
+                  
+                      // Step 2: Establishes the handshake connection with Salesforce
+                      startListening() {
+                          // .bind(this) ensures 'this' inside the callback still refers to our LWC component
+                          subscribe(this.channelName, -1, this.handleNotification.bind(this)) // -1 is current replay ID
+                              .then(response => {
+                                  console.log('Successfully subscribed to channel: ', response.channel);
+                              });
+                      }
+                  
+                      // Step 4: Sits completely idle, firing ONLY when a live event arrives
+                      handleNotification(eventData) {
+                          console.log('--- New Platform Event Received ---');
+                          console.log('Full Payload Object: ', JSON.stringify(eventData.data.payload));
+                          // console.log('Order Number: ', eventData.data.payload.Order_Number__c);
+                      }
+                  }
