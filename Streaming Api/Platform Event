@@ -165,7 +165,7 @@ Handler class to know the publish successful or fail based on creating a task.
                   import { subscribe } from 'lightning/empApi';
                   
                   export default class LattestAccountWithoutRefresh extends LightningElement {
-                      channelName = '/event/Order_Detail__e';  // replace your platform event name
+                      channelName = '/event/Order_Detail__e';  // replace your platform event name, if cdc add '/data/AccountChangeEvent' instead of event add data.
                   
                       connectedCallback() {
                           this.startListening();
