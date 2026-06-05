@@ -18,7 +18,7 @@
                   1). CreatedBy : - store the created by whom
                   2). CreatedDate: - store the createddate
                   3). ReplayId: - It will be populated by the system when publish executed and reached to the event bus.a subcriber can store the replay id value and use it for resubcription purpose. As event bus hold for 3days.and replay id is sequential number like 121, 122 ......
-                  4). EventUuid: - 
+                  4). EventUuid: - Event Universally Unique Identifier, it geneats the unique identifier once event reached to the eventbus. eg : -If an external system fails to process a payment event, developers can use the unique EventUUID in the error logs to trace it back and identify the exact transaction that failed."
 
       we can create the custom fields to hold the temporay data. but 6 data types only support like text,textarea, number,
               data, datetime and checkbox.
