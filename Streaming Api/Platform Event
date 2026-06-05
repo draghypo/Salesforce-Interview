@@ -30,6 +30,11 @@
                   d). platform event field have readonly by default.
                   e). can not be contorl this profile and permission set.
 
+  Process of publishing platform event: - 
+                                            1). Flows
+                                            2). Apex
+                                            c). API
+
 
                                                           
             
