@@ -31,9 +31,24 @@
                   e). can not be contorl this profile and permission set.
 
   Process of publishing platform event: - 
-                                            1). Flows
-                                            2). Apex
-                                            c). API
+            1). Flows : - create a record trigger flow or screen flow not platform event trigger flow. follow the process
+                          of creating a record instead of object put the platform event name.
+                  eg: -  Refer flow name in munnan org = "Publish platform event testing through screen flow"
+                                          
+            2). Apex: - Based on your requirment publish the flow below are the codes.
+                          public class P_PlatformEventHandler {
+                              public static void publishPlatformEvent() {
+                                  List<Order_Detail__e> orderEvent = new List<Order_Detail__e>();
+                                  orderEvent.add(new Order_Detail__e(Generate_Invoice__c=false,Order_Number__c='423283'));
+                                  orderEvent.add(new Order_Detail__e(Generate_Invoice__c=true,Order_Number__c='523283'));
+                                  EventBus.publish(orderEvent);
+                              }
+                          }
+            c). API : - through postman or anywhere we can publish the platform event, method should pe post.
+                Endpoint: - domain of your salesforce/services/data/v63.0/sobjects/Order_Detail__e
+                method: - post
+                body: - prepare a json data based on your custom filed of platform event.
+
 
 
                                                           
