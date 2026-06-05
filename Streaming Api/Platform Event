@@ -187,3 +187,56 @@ Handler class to know the publish successful or fail based on creating a task.
                           // console.log('Order Number: ', eventData.data.payload.Order_Number__c);
                       }
                   }
+
+
+
+
+
+      Database.RaisesPlatformEvent
+*********************************************
+
+      Database.RaisesPlatformEvent: - It is a marker interface does not have any method to overrid. this interface is used in
+                                      batch class to know the details of batch failure.need to implement the interface it will
+                                      let you know the if any exception come in the batch, it will fire the BatchApexErrorEvent
+                                      platform event so you can capture when batch failed , batchname ,job id etc.
+
+        syntax : - global class LoyaltyPointsBatch implements Database.Batchable<sObject>, Database.RaisesPlatformEvent {
+                        start();execute();finish(); }
+                  // if any exception come in the batch it will fire the standard platformevent "BatchApexErrorEvent"
+
+                  Now manually need to write a trigger on standard plarform event on "BatchApexErrorEvent"
+
+                    trigger GenericBatchErrorTrigger on BatchApexErrorEvent (after insert) {
+                        Set<Id> jobIds = new Set<Id>();
+                            for (BatchApexErrorEvent event : Trigger.new) {
+                            if (event.AsyncApexJobId != null) {
+                                jobIds.add(event.AsyncApexJobId);
+                            }
+                        }
+                        Map<Id, AsyncApexJob> jobMap = new Map<Id, AsyncApexJob>([SELECT Id, ApexClass.Name FROM AsyncApexJob    WHERE Id IN :jobIds]);
+                        
+                        for (BatchApexErrorEvent event : Trigger.new) {
+                            String className = 'Unknown Batch Class';
+                            if (jobMap.containsKey(event.AsyncApexJobId)) {
+                                className = jobMap.get(event.AsyncApexJobId).ApexClass.Name;
+                            }
+                            
+                            System.debug('🚨🚨🚨 [BATCH APEX FAILURE DETECTED] 🚨🚨🚨');
+                            System.debug('Batch Class Name : ' + className);
+                            System.debug('Async Job ID     : ' + event.AsyncApexJobId);
+                            System.debug('Error Message    : ' + event.Message);
+                            System.debug('Stack Trace      : ' + event.StackTrace);
+                            System.debug('Failed Scope IDs : ' + event.JobScope); 
+                            System.debug('--------------------------------------------------');
+                        }
+                    }
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
