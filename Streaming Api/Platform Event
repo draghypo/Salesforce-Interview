@@ -13,6 +13,15 @@
                         b). publish after commit: - It will publish event when transaction commited successfully to the database. like order confirmed.
 
    After platform event created: - Api name like: -Order_Detail__e should be suffix with __e.
+  
+   once Platform event got created by default 4 standard field got created as well.
+                  1). CreatedBy
+                  2). CreatedDate
+                  3). EventUuid
+                  4). ReplayId
+      we can create the custom fields to hold the temporay data. but 6 data types only support like text,textarea, number,
+              data, datetime and checkbox.
+
 
                                                           
             
