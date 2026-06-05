@@ -1,1 +1,18 @@
-Platform Event
+                                    Platform Event
+                                ----------------------
+
+  Platform Event: - It is the features of streaming api which work on event driven architecture like publish and subscriber model.
+
+    Notes:-  once we publish the event,event producer will publish it will go to the event bus. event consumer will consume the 
+             services only when the consumer has subscribed the event.
+
+    Process of creating Platform event in salesforce : - setup --> search Platform event and click--> New Platform event -->create.
+
+    Publish behavior: - while creating Platform event there is option publish immediately or publish after commit.
+                        a). publish immediately : - Platform event will be published when publish call executed it does not care whether record success or failed.
+                        b). publish after commit: - It will publish event when transaction commited successfully to the database. like order confirmed.
+
+   After platform event created: - Api name like: -Order_Detail__e should be suffix with __e.
+
+                                                          
+            
