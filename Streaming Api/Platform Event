@@ -31,6 +31,7 @@
                   e). can not be contorl this profile and permission set.
 
   Process of publishing platform event: - 
+*************************************************
             1). Flows : - create a record trigger flow or screen flow not platform event trigger flow. follow the process
                           of creating a record instead of object put the platform event name.
                   eg: -  Refer flow name in munnan org = "Publish platform event testing through screen flow"
@@ -41,7 +42,7 @@
                                   List<Order_Detail__e> orderEvent = new List<Order_Detail__e>();
                                   orderEvent.add(new Order_Detail__e(Generate_Invoice__c=false,Order_Number__c='423283'));
                                   orderEvent.add(new Order_Detail__e(Generate_Invoice__c=true,Order_Number__c='523283'));
-                                  EventBus.publish(orderEvent);
+                                  List<Database.saveResult> result = EventBus.publish(orderEvent);
                               }
                           }
             c). API : - through postman or anywhere we can publish the platform event, method should pe post.
@@ -49,7 +50,80 @@
                 method: - post
                 body: - prepare a json data based on your custom filed of platform event.
 
+      Notes: - After publishing the platform event it does not publish added in the queue, we does not know got success
+               or fail, to know these we have a two interface EventBus.EventPublishSuccessCallback, EventBus.EventPublishFailureCallback
+               having one one method.
 
-
-                                                          
-            
+      Below are the codes: - 
+                          public class P_PlatformEventHandler {
+                              public static void publishPlatformEvent() {
+                                  List<Order_Detail__e> orderEvent = new List<Order_Detail__e>();
+                                  orderEvent.add(new Order_Detail__e(Generate_Invoice__c=false,Order_Number__c='423283'));
+                                  orderEvent.add(new Order_Detail__e(Generate_Invoice__c=true,Order_Number__c='523283'));
+                                  P_PlatformEventHandler_callback callBack = new P_PlatformEventHandler_callback();  // instance of the success fail interface
+                                  List<Database.saveResult> result = EventBus.publish(orderEvent,callBack); // added the instance of interface class.
+                              }
+                          }
+Handler class to know the publish successful or fail based on creating a task.
+----------------------------------------------------------------------------------
+                public class P_PlatformEventHandler_callback implements EventBus.EventPublishSuccessCallback, EventBus.EventPublishFailureCallback {
+                    public void onSuccess(EventBus.successResult result) { // method of EventBus.EventPublishSuccessCallback interface
+                        List<String> uUiD = result.getEventUuids();  // know the uuid.
+                        createTaskforEvent(uUiD, True);
+                    }
+                    public void onFailure(EventBus.failureResult result) { // method of EventBus.EventPublishFailureCallback interface
+                        List<String> uUiD = result.getEventUuids();
+                        createTaskforEvent(uUiD, false);
+                    }
+                    public void createTaskforEvent(List<String> uUids, Boolean isSucess) {
+                        String uUIdsString;
+                        for(String uId : uUids) {
+                            uUIdsString = uUIdsString+uId;
+                        }
+                        Task tas = new Task();
+                        if(isSucess) {
+                            tas.subject = 'Platform event publish successfully.';
+                            tas.Description = 'Total platform event publish' + uUids.size() + '-' + uUids;
+                        }
+                        else {
+                 			tas.subject = 'Platform event published failed';
+                            tas.Description = 'Total platform event publish'+uUids.size();
+                        }
+                        try{
+                          insert tas;  
+                        }
+                        catch(Exception e) {
+                            System.debug('Exception occured='+e.getMessage());
+                        }
+                    }
+                }
+   Test class
+---------------
+              @isTest
+              public class P_PlatformEventHandler_Test {
+                  
+                  @isTest
+                  static void capturePlatformEvent(){
+                      P_PlatformEventHandler.publishPlatformEvent();
+                  }
+                  @istest
+                  static void captureFailedCallback() {
+                      Order_Detail__e orderEvent = new Order_Detail__e(Generate_Invoice__c=true,Order_Number__c='523283');
+                      P_PlatformEventHandler_callback callBack = new P_PlatformEventHandler_callback();
+              		    System.Test.startTest();
+                      EventBus.publish(orderEvent,callBack); 
+                      System.Test.getEventBus().fail();  // this will capture the onFailure method .
+                      System.Test.stopTest();
+                  }
+                   @istest
+                  static void captureSuccessCallback() {
+                      Order_Detail__e orderEvent = new Order_Detail__e(Generate_Invoice__c=true,Order_Number__c='523283');
+                      P_PlatformEventHandler_callback callBack = new P_PlatformEventHandler_callback();
+                      EventBus.publish(orderEvent,callBack);
+                      System.Test.getEventBus().deliver(); // this will capture the onSucess method .
+                  }
+              }
+                              
+                              
+                                                                                        
+                                          
