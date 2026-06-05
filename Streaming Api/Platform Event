@@ -32,6 +32,10 @@
 
   Process of publishing platform event: - 
 *************************************************
+            1). flows
+            2). Apex
+            3). API
+
             1). Flows : - create a record trigger flow or screen flow not platform event trigger flow. follow the process
                           of creating a record instead of object put the platform event name.
                   eg: -  Refer flow name in munnan org = "Publish platform event testing through screen flow"
@@ -123,7 +127,35 @@ Handler class to know the publish successful or fail based on creating a task.
                       System.Test.getEventBus().deliver(); // this will capture the onSucess method .
                   }
               }
+
+  Process of subscribing platform event: - 
+*************************************************
+        There are 3 ways through we can subscribe the platform event.
+
+                1). Flow
+                2). Apex Trigger
+                3). LWC
+
+            1). Flow: - create platform event triggerd flow and select the platform event which you have and perform the 
+                        operation what do you want in the flow.
+            2). Apex Trigger: - need to write the trigger on platform event only support after insert.
+
+                          trigger SubscribePlatformEvent on Order_Detail__e (after insert) {
+                              if(Trigger.isAfter && Trigger.isInsert) {
+                                  createTask(Trigger.new);
+                              }
                               
-                              
-                                                                                        
-                                          
+                              public static void createTask(List<Order_Detail__e> orderDetails) {
+                                  List<Task> tas = new List<Task>();
+                                  for(Order_Detail__e event : orderDetails) {
+                                      tas.add(new Task(subject = 'subscribed from the apex trigger', description = 'orderId = '+event.Order_Number__c));
+                                  }
+                                  insert tas;
+                              }
+                          }
+
+          3). LWC : - through lightning/empApi .
+                          
+                                                        
+                                                                                                                  
+                                                                    
