@@ -155,7 +155,32 @@ Handler class to know the publish successful or fail based on creating a task.
                           }
 
           3). LWC : - through lightning/empApi .
-                          
-                                                        
-                                                                                                                  
-                                                                    
+
+                Js code
+              ----------
+
+                      import { LightningElement, api } from 'lwc';
+                      import { subscribe } from 'lightning/empApi';
+                      
+                      export default class LattestAccountWithoutRefresh extends LightningElement {
+                          // Replace with your actual Platform Event API Name (must end in __e)
+                          channelName = '/event/Order_Detail__e'; 
+                      
+                          // connectedCallback runs automatically when the component loads
+                          connectedCallback() {
+                              // Callback function to handle incoming events
+                              const messageCallback = (response) => {
+                                  console.log('New Platform Event received: ', JSON.stringify(response.data.payload));
+                              };
+                      
+                              // Subscribe to the channel (-1 specifies we want new events only)
+                              subscribe(this.channelName, -1, messageCallback)
+                                  .then(response => {
+                                      console.log('Successfully subscribed to: ', response.channel);
+                                  });
+                          }
+                      }
+                                                
+                                                                              
+                                                                                                                                        
+                                                                                          
