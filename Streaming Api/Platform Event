@@ -23,6 +23,13 @@
       we can create the custom fields to hold the temporay data. but 6 data types only support like text,textarea, number,
               data, datetime and checkbox.
 
+    Key Points: - 
+                  a). It is appended with __e.
+                  b). can not be query on platform event through soql and sosl.
+                  c). can not be used in reports, listview and search.
+                  d). platform event field have readonly by default.
+                  e). can not be contorl this profile and permission set.
+
 
                                                           
             
