@@ -1,0 +1,28 @@
+                                        Call Apex to Flow
+                                      -----------------------
+  Process of Calling Flow From Apex: - 
+                                        1). Create a Autolaunched flow --> create record using resources.
+                                        2). once flow created, pass the resouces value from apex refer the below code.
+                              Note: - {if you want to return value from flow to apex use assignment in the flow}.
+
+                    public class P_Call_ApexToFlow {
+                        public static void createAccountThroughFlow() {
+                            Map<String,Object> passToFlow = new Map<string,Object>();
+                            passToFlow.put('AccountName' , 'Munnan coming From Apex to Flow'); // key as resource of the flow
+                            passToFlow.put('AnnualRevenueNumber' , '1234567890'); // key as resouce of the flow
+                            try {
+                                    // calling process
+                                 Flow.Interview.create_Acount_From_Apex myFlow = new Flow.Interview.create_Acount_From_Apex(passToFlow);
+                                 myFlow.start();
+                                String returnedValue = myFlow.accountId; 
+                                 System.debug('Flow executed successfully==='+returnedValue);
+                                
+                            }
+                            catch(Exception e) {
+                                System.debug('Exception occured=='+e.getMessage());
+                            }
+                                
+                        }
+                        
+                    
+                    }
