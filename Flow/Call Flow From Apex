@@ -1,9 +1,15 @@
                                         Calling Flow From Apex
                                       ----------------------------
+    Points: - 
+                    a). when you interact with a Flow from apex, input data structure must be a Map<String, Object>.
+                    b). Key must be matched with the flow resouces api name case-sensitive.
+                    c). Object value could be anything string, boolean number etc.
+
   Process of Calling Flow From Apex: - 
                                         1). Create a Autolaunched flow --> create record using resources.
                                         2). once flow created, pass the resouces value from apex refer the below code.
                               Note: - {if you want to return value from flow to apex use assignment in the flow}.
+              
 
                     public class P_Call_ApexToFlow {
                         public static void createAccountThroughFlow() {
@@ -15,14 +21,12 @@
                                  Flow.Interview.create_Acount_From_Apex myFlow = new Flow.Interview.create_Acount_From_Apex(passToFlow);
                                  myFlow.start();
                                 String returnedValue = myFlow.accountId; 
-                                 System.debug('Flow executed successfully==='+returnedValue);
-                                
+                                 System.debug('Flow executed successfully==='+returnedValue);  
                             }
                             catch(Exception e) {
                                 System.debug('Exception occured=='+e.getMessage());
-                            }
-                                
-                        }
-                        
-                    
+                            }  
+                        }                  
                     }
+
+    
