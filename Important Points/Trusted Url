@@ -1,0 +1,8 @@
+                                          Trusted Url
+                                      --------------------
+
+      Trusted Url :- It explicitly authorizes the browser to load external resources (like APIs, images, or iframes) 
+                     directly within a Lightning Web Component (LWC) without being blocked by browser security restrictions.
+
+        example: - calling public api like indian postal code from LWC browse will block the endpoint url so need to add
+                    the url in the Trusted Url and make the check box check for connect src script.
