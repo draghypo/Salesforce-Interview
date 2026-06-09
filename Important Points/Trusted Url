@@ -7,4 +7,4 @@
         example: - calling public api like indian postal code from LWC browse will block the endpoint url so need to add
                     the url in the Trusted Url and make the check box check for connect src script.
 
-        Use: - When we are performing callout directly from lwc then Trusted Url will come in to the picure.
+        Use: - When we are performing callout directly from lwc then Trusted Url will come in to the picture.
