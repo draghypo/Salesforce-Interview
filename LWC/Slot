@@ -6,3 +6,35 @@
                                     a). Unnamed slot (Default slot).
                                     b). Named Slot
 
+        UnNamed and Named slot both are in once code pls look on the below.
+
+  Parent Comp
+------------------
+
+        import { LightningElement } from 'lwc';
+        export default class P_Slot_Parent extends LightningElement {}
+
+<template>
+    <lightning-card title="Slot Parent">
+        <c-p_-slot_child> <!-- To pass the markup from parent to child need to use the kebab with child compnent name-->
+            <p style="color:red">Hello from UnNamed or default Slot</p> <!-- UnNamed Slot but in child side need to use slot tag to get the value. -->
+            <p slot='body' style="color:blue">Hello from Named Slot</p> <!-- Named Slot from parent side need to set the slot attribute and get in child side by using slot tag with name attibute -->
+        </c-p_-slot_child>
+    </lightning-card>
+</template>
+
+
+    child Comp
+------------------------
+
+import { LightningElement } from 'lwc';
+export default class P_Slot_child extends LightningElement {}
+
+<template>
+    <lightning-card title="Slot child">
+            <h1> Hello from child</h1>
+            <slot></slot> <!-- Recieved Unamed slot, it is mandatory to use to recieve the markup in child side.-->
+            <slot name="body"></slot> <!-- Named slot by using name attibut getting markup from parent side.-->
+    </lightning-card>
+</template>
+
