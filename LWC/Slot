@@ -1,0 +1,8 @@
+                                              Slot
+                                            -----------
+
+  Slot: - It is nothing but a passing a markup from Parent to child.
+      Details: - Two Types of Slot.
+                                    a). Unnamed slot (Default slot).
+                                    b). Named Slot
+
