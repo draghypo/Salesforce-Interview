@@ -8,6 +8,12 @@
 
         UnNamed and Named slot both are in once code pls look on the below.
 
+  Que: - what is a real-time scenario where you would use them?
+  Ans: - You need to build multiple cards on a dashboard. They must all share the exact same visual design (borders,
+          padding, background colors), but the content inside them varies completely (e.g., one shows a password reset 
+          alert, another shows an image link).
+The Solution: Create one generic customCard component with a slot wrapper.
+
   Parent Comp
 ------------------
 
