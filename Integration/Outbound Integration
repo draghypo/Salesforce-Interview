@@ -109,3 +109,52 @@ In outboud Integration we can perform standard Rest API as well below are the ex
         System.debug('Response body: ' + response.getBody());
     }
 *************************************************************************************************************************
+Outbound callouts Test classes appraoch: - 
+
+public class Notes_Of_TestClass_RestService {
+    
+    /*  for creating test class of callout we have to write fake class with implementing HttpCalloutMock interface 
+     * 		this interface has one method that is respond. below are the example.
+			
+    
+    /*  public class RestForTestClass {    // it's original class
+    		public static void restApiForTest() {
+        	String endPoint = 'Https://www.sadique.com';
+        	Http protocol = new Http();
+        	HttpRequest request = new HttpRequest();
+        	request.setEndpoint(endPoint);
+        	request.setMethod('GET');
+        	HttpResponse response = protocol.send(request);
+        	String result = response.getBody();
+        	Account acc = new Account();
+        	acc.name = result;
+        	insert acc;
+    		}
+		}
+
+		global class HttpCalloutMockFakeClass implements HttpCalloutMock {    // it's fake class to acheive test class
+    		global HttpResponse respond(HttpRequest req) {  // respond method present in HttpCalloutMock interface
+        	String endPoint = req.getEndpoint();
+        	String method = req.getMethod();
+        	System.assertEquals('Https://www.sadique.com', endPoint);
+        	System.assertEquals('GET', method);
+        	HttpResponse response = new HttpResponse();
+        	response.setBody('SADIQ');
+        	response.setStatusCode(200);
+        	return response;
+    		}  
+		}
+
+		@isTest
+		public class Test_Class_OF_Rest_Service {   // it's a test class
+    		@isTest
+    		public static void testRestService() {
+        	HttpCalloutMockFakeClass callout = new HttpCalloutMockFakeClass();
+        	System.Test.setMock(HttpCalloutMock.class, callout);
+        	RestForTestClass.restApiForTest();
+        	Account acc = [SELECT id, Name FROM Account];
+        	System.assertEquals('SADIQ', acc.Name);
+    		}
+		}
+   */
+}
