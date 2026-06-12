@@ -172,6 +172,9 @@
                                         // Optional post-processing logic
                                     }
                                 }
+
+					Notes: - In Salesforce, you can perform up to 100 callouts per transaction. means per chunk only 100 callout can be possible if more throw an exception 101 callouts.
+							 The limit is 100 callouts per chunk.
                 
         ==> for more details visit on this link :- https://developer.salesforce.com/docs/atlas.en-us.apexcode.meta/apexcode/apex_batch_interface.htm
 
