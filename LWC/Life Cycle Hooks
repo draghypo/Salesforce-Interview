@@ -146,6 +146,9 @@
                 Child rendered callback called
                 Parent rendered callback called
 
+ DisconnectedCallBack Unmounting phase
+*****************************************************
+
 		=> Unmounting Phase:- Removing the component from DOM.
 
 				disconnectedCallback():- This hooks will invoked when the element is removed from a
@@ -258,6 +261,8 @@
                                         Child disconnectdcallback called
                                         Parent rendered callback called
 
+	ErrorCallBack Error Phase
+*********************************************
 		=> Error Phase:- This will invoke when anyother lifecycle throw an error or get error.
 					syntax:-  
                             errorCallback(error, stack) {      // error:- javascript native error
@@ -361,7 +366,8 @@
 										Child disconnectdcallback called
 										Parent rendered callback called
                                     
-
+			render Method
+********************************************
 		=> render():- It's not a part of lifecycle hook. generally the main purpose of render() method to 
 					  update the UI.The render() method runs whenever the event action happens. 
 
