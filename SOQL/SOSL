@@ -1,0 +1,73 @@
+/*												SOSL
+ 											 --------
+	SOSL:-  It stand's for Salesforce Object Search Langauage. That is used to perform text searches in records
+			across the all Sobject.
+		Purpose:-  
+				a). Used to perform text search across the records.
+				b). Used to search field across the all sobject.
+		Syntax :- FIND {Munnan} IN ALL FIELDS RETURNING Account(name WHERE Phone=null LIMIT 5)
+		Syntax :- List<List<SObject>> searchList = [FIND 'Munnan' IN ALL FIELDS RETURNING Account(Name), 
+																						Contact(FirstName,LastName)];
+				=> FIND :-  this clause is mandatory in sosl.
+				=> SearchGroup(IN ALL FIELDS) :- it is search group and it's optional.
+						There are Five types of search group.
+							1). ALL FIELDS :- it will fetch the record based on the all fields.
+							2). NAME FIELDS :- it will fetch the record based on the Name fields.
+							3). EMAIL FIELDS :- it will fetch the record based on the Email fields.
+							4). PHONE FIELDS :- it will fetch the record based on the Phone fields.
+							5). SIDEBAR FIELDS :-
+				=> RETURNING :- it's optional.
+				=> Object Name :- it can be one or multiple as well.
+		Note:- {if object is custom then it must be searchable object.else you will get error 
+																"entity type practice__c does not support search"}
+
+		Practicing in query editor:- 
+			example 1:- FIND {sadiq} IN ALL FIELDS RETURNING Account(Name),Contact(lastname),practice__c(Name),
+																								opportunity(Amount)
+				output:- it will give Account,Contact,practice__C and opportunity data if the any filed of record
+							contains sadiq.
+				----------------------------------------------------------------------------------
+			  | Account(3)		| Contact(4) 		| practice__c(2) 		| Opportunity(1)             |
+				|--------------------------------------------------------------------------------|
+				|	sadiq			    | sadiq				  | sadiq					    | 24000			                 |
+				|	sadiq			    | sadiq				  | sadique				    | 				                   |
+				|	sadiq			    | sadiq				  | 						      | 				                   |
+				|	              | Md sadiq			| 						      | 				                   |
+				----------------------------------------------------------------------------------
+			example 2:- FIND {sadiq} 
+					output:-  it will fetch the object name and  record id of record which record contains sadiq.
+
+
+public class Sosl {
+    public static void practiceOnSosl() {
+        List<List<Sobject>> searchList = [FIND 'sadiq' IN ALL FIELDS RETURNING Account(Name),Contact(lastname),
+            																				practice__c(Name),
+																							opportunity(Amount)];
+        Integer countAccount = 0;
+        Integer countContact = 0;
+        Integer countPracticeRecord = 0;
+        Integer countOpportunity = 0 ;
+        for(Account account : (List<Account>) searchList[0]) {
+            countAccount++;
+        }
+        for(Contact contact : (List<Contact>) searchList[1]) {
+            countContact++;
+        }
+        for(practice__c practice : (List<practice__c>) searchList[2]) {
+            countPracticeRecord++;
+        }
+        for(opportunity opportunity : (List<opportunity>) searchList[3]) {
+            countOpportunity++;
+        }
+        System.debug('Account='+countAccount+'\nContact='+countContact+'\nPractice='+countPracticeRecord+'\nOpportunity='+countOpportunity);
+    }    
+    
+    public static void test() {
+        List<List<Sobject>> searchList = [FIND 'ghalib' RETURNING practice__c(name)];
+			for (practice__c account : (List<practice__c>) searchList[0]) {
+    			System.debug(account.name);
+			}
+   }
+
+}*/
+public class Notes_Of_SOSL {}
