@@ -1,0 +1,15 @@
+                                          Junction Object
+                                        --------------------
+ A junction object in Salesforce is a custom object used to create a many-to-many relationship between two other objects.
+
+  Problem without junction object.
+--------------------------------------
+          1). Rahul wants to take Math, Physics, and Chemistry. need to create 3 records, data redundency happen.
+          2). Math class needs to have Rahul, Priya, and Amit. again data redundency.
+          3). You can't put all three courses into a single field on Rahul's profile.
+          4). You can't put all three students into a single field on the Math course record.
+          5). If you duplicate Rahul’s actual profile three times (Rahul-Math, Rahul-Physics, Rahul-Chemistry)
+              to force a match, you create Data Redundancy. If Rahul changes his phone number, you now have to update
+              it in three different places, causing data mess.
+
+
