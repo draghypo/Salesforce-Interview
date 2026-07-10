@@ -9,6 +9,7 @@ Process of performing callout from Soap API--Outbound
 6). Convert the WSDL to Apex. Setup > Apex Classes > Generate from WSDL > Choose your saved file and click Parse WSDL.
 7). Two apex class will be created.
 8). call the class based on your requirement. below code for now
+9). In munnan org refer the NumberConversionService class.
 
 NumberConversionService.NumberConversionSoap soapClient = new NumberConversionService.NumberConversionSoap();
 Long testNumber = 2026; 
