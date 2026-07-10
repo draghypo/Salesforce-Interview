@@ -12,4 +12,16 @@
               to force a match, you create Data Redundancy. If Rahul changes his phone number, you now have to update
               it in three different places, causing data mess.
 
+Junction object come in to picture.
+-----------------------------------------
+Student
+Course
+Enrollment this is the junction object between student and course.
+
+    One student can have multiple courses, and course can be a multiple students enrolment object will help you.
+
+Note: - {Salesforce Recommends to go with masterdetails not lookup Because it uses Master-Detail relationships,
+          if you delete Rahul from the school, Salesforce automatically triggers a Cascade Deletion and wipes
+          out his 3 enrollment records instantly. This keeps your database perfectly clean with zero orphaned data.}
+
 
