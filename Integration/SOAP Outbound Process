@@ -1,0 +1,83 @@
+Process of performing callout from Soap API--Outbound
+-------------------------------------------------------------
+
+1). Ask end point URL and WSDL file from the external system.
+2). create remote site setting and store the end point to authorize the destination domain.
+3). https://www.dataaccess.com    : - public url to perfom the soap outbound for poc visit this site.
+4). https://www.dataaccess.com/webservicesserver/NumberConversion.wso?WSDL  this web sevice will convert the number to word.
+5). Through the above link you will get the wsdl file copy it and paste in the editior and save with extension wsdl.
+6). Convert the WSDL to Apex. Setup > Apex Classes > Generate from WSDL > Choose your saved file and click Parse WSDL.
+7). Two apex class will be created.
+8). call the class based on your requirement. below code for now
+
+NumberConversionService.NumberConversionSoap soapClient = new NumberConversionService.NumberConversionSoap();
+Long testNumber = 2026; 
+try {
+    String resultInWords = soapClient.NumberToWords(testNumber); // Invoke the specific SOAP operation method
+    System.debug('--- SOAP Outbound POC Success ---');
+    System.debug('Input Number: ' + testNumber);
+    System.debug('Response From Server: ' + resultInWords); // Expected: "two thousand twenty six"
+    
+} catch (Exception e) {
+    System.debug('--- SOAP Outbound POC Failed ---');
+    System.debug('Error Message: ' + e.getMessage());
+}
+
+
+Note: -  {no need of client Id and secret, just parse the wsdl to the apex, if external system provide separately User id and password
+		 then update that in the apex class manually }
+
+for now go with this file save it with .wsdl extension.
+
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:tns="http://www.dataaccess.com/webservicesserver/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.dataaccess.com/webservicesserver/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.dataaccess.com/webservicesserver/">
+      <s:element name="NumberToWords">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="ubiNum" type="s:unsignedLong" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="NumberToWordsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element name="NumberToWordsResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </types>
+  <message name="NumberToWordsSoapRequest">
+    <part name="parameters" element="tns:NumberToWords" />
+  </message>
+  <message name="NumberToWordsSoapResponse">
+    <part name="parameters" element="tns:NumberToWordsResponse" />
+  </message>
+  <portType name="NumberConversionSoapType">
+    <operation name="NumberToWords">
+      <input message="tns:NumberToWordsSoapRequest" />
+      <output message="tns:NumberToWordsSoapResponse" />
+    </operation>
+  </portType>
+  <binding name="NumberConversionSoapBinding" type="tns:NumberConversionSoapType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="NumberToWords">
+      <soap:operation soapAction="" style="document" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+    </operation>
+  </binding>
+  <service name="NumberConversion">
+    <port name="NumberConversionSoap" binding="tns:NumberConversionSoapBinding">
+      <soap:address location="https://www.dataaccess.com/webservicesserver/NumberConversion.wso" />
+    </port>
+  </service>
+</definitions>
+
+																					
