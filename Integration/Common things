@@ -6,17 +6,10 @@
 <==> For Security Token:-  your salesforce base url/_ui/system/security/ResetApiTokenEdit?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DPersonalInfo&setupid=ResetApiToken
 <==> Access token Url:- if using client credentials==> https://popcornapps-c-dev-ed.my.salesforce.com/services/oauth2/token
 
-
-
-
-
-
-<==> Process of creating connected App to provide the clientId and ClientSecret:-  Setup->App Manager->New Connected App->here you will get Client Id and scret.
-
-
-
+**********************************************************************************************************************************************
+                                                  HttP
        
-<==> Http:- It is a protocol used to exchanging the information across the network, It will send the request to the server. 
+ Http:- It is a protocol used to exchanging the information across the network, It will send the request to the server. 
             Service consumer will send the request and service provider will send the response via this protocol.
             Http default port number is 80 and for Https is 443.
             https://domain:portnumber/path we have four thing in URL.
@@ -30,7 +23,8 @@
 
     In Apex: - Http is connectionless and statless protocol after perorming disconnected and lost the state. for other request again you need to build a connection.
               Http is predefined class which holds two methods a)send b) toString.
-<==> URI Vs URL vs URN : -
+ URI Vs URL vs URN : -
+------------------------------
                           URI: - Uniform Resource Identifier :- used to identify the resouce on the internet or in a network, It's like a general category that includes both URLs and URNs.
                           URL: - Uniform Resource Locator: - A URL is a type of URI that provides the location of a resource on the internet and how to access it (typically using HTTP or HTTPS).
                           URN: - Uniform Resource Name: - A URN is another type of URI, but it does not provide location or how to access the resource. Instead, a URN is used to uniquely identify a resource by name within a given namespace.
