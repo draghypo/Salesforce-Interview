@@ -1,16 +1,20 @@
-                                                                          Integration
-
-                                  Integration in Salesforce is the process of connecting Salesforce with external systems to exchange data.
-
+          
 <==>Authentication:- Check User Identity to provide system access.
 <==>Authorization:-  Verifies If user can access the resources of the system.
+<==> Callback URl for prod:- https://login.salesforce.com/
+<==> Callback URL for prod:-  https://test.salesforce.com/
+<==> For Security Token:-  your salesforce base url/_ui/system/security/ResetApiTokenEdit?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DPersonalInfo&setupid=ResetApiToken
+<==> Access token Url:- if using client credentials==> https://popcornapps-c-dev-ed.my.salesforce.com/services/oauth2/token
+
+
+
+
+
 
 <==> Process of creating connected App to provide the clientId and ClientSecret:-  Setup->App Manager->New Connected App->here you will get Client Id and scret.
 
-<==> Callback URl for prod:- https://login.salesforce.com/
-<==> Callback URL for prod:-  https://test.salesforce.com/
 
-<==> For Security Token:-  your salesforce base url/_ui/system/security/ResetApiTokenEdit?retURL=%2Fui%2Fsetup%2FSetup%3Fsetupid%3DPersonalInfo&setupid=ResetApiToken
+
        
 <==> Http:- It is a protocol used to exchanging the information across the network, It will send the request to the server. 
             Service consumer will send the request and service provider will send the response via this protocol.
@@ -36,7 +40,7 @@
 
 
 ********************************************************************************************************************************************************************
-Postman setup details:- 
+Postman setup details with password credentials:- 
 
 Oauth2.0 from postman
 ------------------
