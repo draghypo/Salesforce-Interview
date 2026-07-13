@@ -1,0 +1,4 @@
+soap inbound process
+-----------------------------
+  1). First create a class go to apex class in setup generate wsdl file save as with wsdl extension.
+  2). provide oauth scope details like client key secret those all things so they will do the setup on thier envirnoment.
