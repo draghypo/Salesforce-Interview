@@ -2,3 +2,36 @@ soap inbound process
 -----------------------------
   1). First create a class go to apex class in setup generate wsdl file save as with wsdl extension.
   2). provide oauth scope details like client key secret those all things so they will do the setup on thier envirnoment.
+
+
+Munnan org apex class: - 
+                              /* This Inbound class is responisble to create a account through saop api from Railway org */
+                              global class P_Soap_API_Inbound {
+                                  webservice static void createAccount(String name,string phone){
+                                      try{
+                                          insert new Account(Name=name,Phone=phone);
+                                      }
+                                      catch(Exception ex) {
+                                          System.debug('Exception occured=='+ex.getMessage());
+                                      }
+                                  }
+                              
+                              }
+
+   now generate wsdl file and share to the external system with oauth details.
+      for now other salesfroce org is Railway org.
+
+      1). generate apex class based on the wsdl file. and call from anonymous for testing.
+
+      anonymous code: - 
+
+soapSforceComSchemasClassPSoapApi.P_Soap_API_Inbound soapService = new soapSforceComSchemasClassPSoapApi.P_Soap_API_Inbound();
+soapSforceComSchemasClassPSoapApi.SessionHeader_element sessionHeader = new soapSforceComSchemasClassPSoapApi.SessionHeader_element();
+sessionHeader.sessionId = 'https://popcornapps-c-dev-ed.my.salesforce.com/secur/frontdoor.jsp?sid=00D5g00000Fo4bF!AQQAQE9wbP3EfZqA7_fY9JQNJhwM8Rhx3ziHtZun5rxlh_10q2w6bfUhrd2vBV_jL3cRFH7D0fFIpfmnAmEA8blusXwFr9KD';   // Note: You must provide a valid Session ID or Access Token from the Munnan target org
+ soapService.SessionHeader = sessionHeader;
+try {
+    soapService.createAccount('Railway Transit Corp soap', '9905566778');
+    System.debug('SOAP Callout executed successfully.');
+} catch (Exception e) {
+    System.debug('SOAP Callout failed with exception: ' + e.getMessage());
+}
